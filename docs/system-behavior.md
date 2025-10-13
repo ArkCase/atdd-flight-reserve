@@ -44,9 +44,6 @@ flowchart TD
     classDef actor fill:#9FF,stroke:#007,stroke-width:2px
     classDef external fill:#f9f,stroke:#333,stroke-width:2px
     classDef usecase fill:#DDF,stroke:#333,stroke-width:2px
-
-
-
 ```
 
 Primary Actors:
