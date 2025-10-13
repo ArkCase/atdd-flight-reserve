@@ -3,4 +3,6 @@ This documentation is for the project [ATDD- Flight Reservation System](https://
 Table of Contents:
 
 - [System Behavior](system-behavior.md)
-- [[System Structure](system-structure.md)]()
+- [System Structure](system-structure.md)
+- 
+- 
