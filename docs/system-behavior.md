@@ -44,8 +44,9 @@ flowchart TD
     classDef actor fill:#9FF,stroke:#007,stroke-width:2px
     classDef external fill:#f9f,stroke:#333,stroke-width:2px
     classDef usecase fill:#DDF,stroke:#333,stroke-width:2px
-
 ```
+
+![Use Case Diagram](images/frs-use-case-diagram.png)
 
 Primary Actors:
 
@@ -105,8 +106,6 @@ The customer or agent searches for a flight (origin, destination, dates). The FR
 ### Postconditions
 
 - FRS displays available flights, seats and thier prices based on the customer inputs
-  
-  
 
 ## Use Case Narrative: Create Reservation PNR
 
@@ -116,24 +115,12 @@ Book & Create PNR
 
 ### Primary Actor
 
-
-
 ### Goal
-
-
 
 ### Preconditions
 
-- 
-
-### Main Success Scenario
-
-1. 
-
-### Extensions (Alternative Flows)
-
-- 
-
-### Postconditions
+- ### Main Success Scenario
+1. ### Extensions (Alternative Flows)
+- ### Postconditions
 
 - 
