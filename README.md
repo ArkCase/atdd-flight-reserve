@@ -10,6 +10,7 @@ This repository contains the code for the Flight Reservation System (FRS) projec
 Read the [Documentation](https://arkcase.github.io/atdd-flight-reserve)
 
 ## Project Board
+See the [Project Board](https://github.com/orgs/ArkCase/projects/9).
 ## License
 MIT License
 ## Contributors
