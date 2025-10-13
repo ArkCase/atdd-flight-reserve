@@ -7,6 +7,8 @@ This repository contains the code for the Flight Reservation System project, dev
 1. Clone this repository to start your contribution.
 
 ## Documentation
+Read the [Documentation](https://arkcase.github.io/atdd-flight-reserve)
+
 ## Project Board
 ## License
 MIT License
