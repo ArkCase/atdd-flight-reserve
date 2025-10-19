@@ -17,4 +17,5 @@ See the [Project Board](https://github.com/orgs/ArkCase/projects/9).
 ## License
 MIT License
 ## Contributors
-* 
+- [Anil Valevate](https://www.linkedin.com/in/anil-valevate-90650a19/)
+- [David Miller](https://www.linkedin.com/in/david-miller-ba89941/)
