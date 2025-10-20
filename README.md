@@ -26,4 +26,4 @@ MIT License
 - [Boris Gerasovski](https://github.com/gerasovskiboris)
 - [Ana-Marija Trajkovska](https://github.com/anatrajkovskaarmedia)
 - Ashish Pokal
-- [Valentina Jemuović]([https://github.com/valentinajemuovic](https://www.linkedin.com/in/valentinajemuovic/)): ATDD coach.
+- [Valentina Jemuović](https://www.linkedin.com/in/valentinajemuovic/): ATDD coach.
