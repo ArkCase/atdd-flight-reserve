@@ -35,7 +35,7 @@ jobs:
       uses: optivem/find-latest-docker-images-action@v1
       with:
         image-urls: |
-          ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/monolith:latest
+          ghcr.io/arkcase/${{ github.event.repository.name }}/monolith:latest
 
   should-run:
     needs: find-latest-images
