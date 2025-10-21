@@ -4,5 +4,3 @@ Table of Contents:
 
 - [System Behavior](system-behavior.md)
 - [System Structure](system-structure.md)
-- 
-- 

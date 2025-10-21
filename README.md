@@ -22,7 +22,7 @@ See the [Project Board](https://github.com/orgs/ArkCase/projects/9).
 ## License
 MIT License
 ## Contributors
-- [Anil Valevate](https://github.com/anilvv1)
+- [Anil Valevate](https://www.linkedin.com/in/anil-valevate-90650a19/)
 - [David Miller](https://www.linkedin.com/in/david-miller-ba89941/)
 - [Nadica Deleva](https://github.com/ndeleva-armedia)
 - [Sowmiya Thoguluva](https://github.com/sowmiya-thoguluva)
@@ -31,4 +31,4 @@ MIT License
 - [Boris Gerasovski](https://github.com/gerasovskiboris)
 - [Ana-Marija Trajkovska](https://github.com/anatrajkovskaarmedia)
 - Ashish Pokal
-- [Valentina Jemuović](https://github.com/valentinajemuovic): ATDD coach.
+- [Valentina Jemuović](https://www.linkedin.com/in/valentinajemuovic/): ATDD coach.
