@@ -5,6 +5,11 @@ This is an ATDD Sandbox Project for the team memebers to build the system togeth
 
 [![pages-build-deployment](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/pages/pages-build-deployment/badge.svg?branch=main)](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/pages/pages-build-deployment)
 
+[![commit-stage-monolith](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/commit-stage-monolith.yml/badge.svg)](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/commit-stage-monolith.yml)
+[![acceptance-stage](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/acceptance-stage.yml/badge.svg)](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/acceptance-stage.yml)
+[![qa-stage](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/qa-stage.yml/badge.svg)](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/qa-stage.yml)
+[![qa-signoff](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/qa-signoff.yml/badge.svg)](https://github.com/ArkCase/atdd-flight-reserve/workflows/qa-signoff.yml)
+[![prod-stage](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/prod-stage.yml/badge.svg)](https://github.com/ArkCase/atdd-flight-reserve/workflows/prod-stage.yml)
 
 ## Instructions
 1. Clone this repository to start your contribution.
