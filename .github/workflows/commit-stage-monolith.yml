@@ -64,7 +64,7 @@ jobs:
         image-name: monolith
         registry: ghcr.io
         registry-username: ${{ github.actor }}
-        image-namespace: ${{ github.repository }}
+        image-namespace: ${{ env.IMAGE_NAMESPACE }}
         image-latest-tag: latest
         commit-sha: ${{ github.sha }}
         dockerfile: Dockerfile
