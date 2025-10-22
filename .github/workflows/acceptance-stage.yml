@@ -37,6 +37,10 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Verify image access
+      run: |
+        docker pull ghcr.io/${{ github.repository_owner,, }}/${{ github.event.repository.name,, }}/monolith:latest || true    
+
     - name: Resolve Latest Docker Digests
       id: get-digest
       uses: optivem/find-latest-docker-images-action@v1
@@ -107,7 +111,7 @@ jobs:
       run: echo "Run External System Contract Tests"
 
     - name: Run E2E Tests
-      run: ./gradlew test --tests com.optivem.atddaccelerator.template.systemtest.e2etests.*
+      run: ./gradlew test --tests com.armedia.atddaccelerator.template.systemtest.e2etests.*
       working-directory: system-test
   
   prerelease:
