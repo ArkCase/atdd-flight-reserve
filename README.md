@@ -31,3 +31,5 @@ MIT License
 - [Ana-Marija Trajkovska](https://github.com/anatrajkovskaarmedia)
 - Ashish Pokal
 - [Valentina Jemuović](https://github.com/valentinajemuovic): ATDD coach.
+
+Test commit
