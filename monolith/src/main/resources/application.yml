@@ -4,7 +4,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_HOST:mysql}:${DB_PORT:3306}/flight_atdd?useSSL=false&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://${DB_HOST:mysql}:${DB_PORT:3306}/flight_atdd?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull
     username: ${DB_USERNAME:fl_atdd}
     password: ${DB_PASSWORD:fl_atdd}
 

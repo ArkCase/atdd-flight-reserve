@@ -34,8 +34,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: flight_atdd
-      MYSQL_USER: fl_advisor
-      MYSQL_PASSWORD: fl_advisor
     command: --init-file /docker-entrypoint-initdb.d/database.sql
     ports:
       - "3307:3306"
