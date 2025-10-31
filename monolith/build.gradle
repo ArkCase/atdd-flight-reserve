@@ -21,7 +21,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.flywaydb:flyway-core:10.17.0'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+	//implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'com.mysql:mysql-connector-j:9.5.0'
 	implementation "org.flywaydb:flyway-mysql:10.17.0"
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
