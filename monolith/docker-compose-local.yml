@@ -14,7 +14,7 @@ services:
       mysql:
         condition: service_healthy
     ports:
-      - "8082:8080"   # Web app
+      - "8083:8080"   # Web app
       - "5005:5005"   # Debug port
     #volumes:
       # Mount JAR for rebuild-free updates
