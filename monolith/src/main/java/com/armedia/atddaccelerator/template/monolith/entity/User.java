@@ -3,8 +3,8 @@ package com.armedia.atddaccelerator.template.monolith.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -23,7 +23,8 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @Entity
-public class User implements UserDetails, Serializable {
+public class User //implements UserDetails, Serializable {
+{
     @Id
     @Column(unique = true, nullable = false)
     private String username;
@@ -44,11 +45,11 @@ public class User implements UserDetails, Serializable {
     @JoinTable(name = "UserRole", joinColumns = @JoinColumn(name = "username"), inverseJoinColumns = @JoinColumn(name = "role_name"))
     private Set<Role> userRoles = new HashSet<>();
 
-    @Override
+   /* @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return userRoles;
-    }
-
+    }*/
+/*
     @Override
     public String getPassword() {
         return password;
@@ -77,6 +78,6 @@ public class User implements UserDetails, Serializable {
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
+    }*/
 
 }
