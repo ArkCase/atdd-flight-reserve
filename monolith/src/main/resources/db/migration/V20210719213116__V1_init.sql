@@ -31,7 +31,8 @@ CREATE TABLE user_role
 CREATE TABLE country
 (
     id   INTEGER AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL,
+    INDEX name_index (name)
 );
 
 CREATE TABLE city
@@ -43,7 +44,9 @@ CREATE TABLE city
     INDEX       country_index (country_id),
     FOREIGN KEY (country_id)
         REFERENCES country (id)
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    INDEX name_index (name),
+    UNIQUE INDEX name_country_index (name, country_id)
 );
 
 CREATE TABLE comment
@@ -77,6 +80,7 @@ CREATE TABLE airport
     country_id INTEGER,
     INDEX      city_index (city_id),
     INDEX      country_index (country_id),
+    INDEX      iata_index (iata),
     FOREIGN KEY (city_id)
         REFERENCES city (id)
         ON DELETE CASCADE,
@@ -88,7 +92,8 @@ CREATE TABLE airport
 CREATE TABLE airline
 (
     id   INTEGER AUTO_INCREMENT PRIMARY KEY,
-    code VARCHAR(3) NOT NULL UNIQUE
+    code VARCHAR(3) NOT NULL UNIQUE,
+    INDEX code_index (code)
 );
 
 

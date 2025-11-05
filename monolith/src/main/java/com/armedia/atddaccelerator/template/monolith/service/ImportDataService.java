@@ -20,7 +20,7 @@ public interface ImportDataService {
 
             while (line != null) {
 
-                List<String> lineData = Arrays.asList(line.split(",")).stream()
+                List<String> lineData = Arrays.stream(line.split(","))
                         .map(x -> x.replace("\"", ""))
                         .collect(Collectors.toList());
 

@@ -12,21 +12,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class RouteServiceImpl implements RouteService
-{
+public class RouteServiceImpl implements RouteService {
     private final RouteRepository routeRepository;
 
     @Override
     public Route save(List<String> rawData, Airline airline, Airport srcAirport, Airport dstAirport) {
-        Route route = Route.builder()
-                .airline(airline)
-                .src_airport(srcAirport)
-                .dst_airport(dstAirport)
-                .codeshare(rawData.get(6))
-                .stops(Integer.valueOf(rawData.get(7)))
-                .equipment(rawData.get(8))
-                .price(Double.valueOf(rawData.get(9))).build();
-
+        Route route = routeRepository.buildRoute(rawData, airline, srcAirport, dstAirport);
         return routeRepository.save(route);
     }
 }

@@ -14,10 +14,12 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
 @Data
+@ToString(exclude = {"inbound_routes", "outbound_routes"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
