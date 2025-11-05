@@ -5,5 +5,5 @@ import com.armedia.atddaccelerator.template.monolith.exception.CityNotFoundExcep
 import com.armedia.atddaccelerator.template.monolith.exception.RouteNotFoundException;
 
 public interface FlightService {
-    CheapestFlightRoute findShortestPath(Long sourceCityId, Long destinationCityId) throws CityNotFoundException, RouteNotFoundException;
+    CheapestFlightRoute findShortestCostPath(Long sourceCityId, Long destinationCityId) throws CityNotFoundException, RouteNotFoundException;
 }

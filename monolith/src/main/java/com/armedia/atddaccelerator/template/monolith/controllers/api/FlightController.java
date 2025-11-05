@@ -27,7 +27,7 @@ public class FlightController {
 
         CheapestFlightRoute result = null;
         try {
-            result = flightService.findShortestPath(source, destination);
+            result = flightService.findShortestCostPath(source, destination);
         } catch (CityNotFoundException | RouteNotFoundException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)

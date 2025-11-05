@@ -35,8 +35,7 @@ public class FlightServiceImpl implements FlightService
 
     private Node sourceNode;
 
-    // TODO : For better performance it's good to replace this implementation with graph database (Neo4j)
-    public CheapestFlightRoute findShortestPath(Long sourceCityId, Long destinationCityId) throws CityNotFoundException,
+    public CheapestFlightRoute findShortestCostPath(Long sourceCityId, Long destinationCityId) throws CityNotFoundException,
             RouteNotFoundException
     {
         Graph init = initRoutes(sourceCityId);
@@ -48,12 +47,11 @@ public class FlightServiceImpl implements FlightService
 
         //get all destination nodes from the calculated graph
         List<Node> destNodes = calculatedGraph.getNodes().stream().filter(node -> dstAirportIds.contains(node.getName())).collect(Collectors.toList());
-
-        if (destNodes != null && !destNodes.isEmpty()) {
-            // find the node with lowest cost.
+        if (!destNodes.isEmpty()) {
+            // find the node with the lowest cost.
             Node minCostNode = destNodes
                     .stream()
-                    .min(Comparator.comparing(Node::getCost))
+                    .min(Comparator.comparing(n -> n.getShortestPath().size()))
                     .orElseThrow(NoSuchElementException::new);
 
             return createResponse(minCostNode);
@@ -62,10 +60,15 @@ public class FlightServiceImpl implements FlightService
         throw new RouteNotFoundException(String.format("Sorry, we don't find any route between %s and %s ", sourceCityId, destinationCityId));
     }
 
+    public void test (Long sourceCityId, Long destinationCityId)
+    {
+
+    }
+
     private Graph initRoutes(Long sourceCityId) throws CityNotFoundException {
 
         Optional<City> city = cityService.findById(sourceCityId);
-        if (!city.isPresent()) {
+        if (city.isEmpty()) {
             throw new CityNotFoundException("Chosen source city not exists!");
         }
 
@@ -85,14 +88,14 @@ public class FlightServiceImpl implements FlightService
 
     private void createAdjNodes(Graph graph, Node node, List<Route> inbound_routes) {
         for (Route route : inbound_routes) {
-            if (graph.getNodes().stream().filter(x -> x.getName().equals(route.getDst_airport().getId())).findFirst().isPresent()) {
+            if (graph.getNodes().stream().anyMatch(x -> x.getName().equals(route.getDst_airport().getId()))) {
                 continue;
             }
             Node adjNode = new Node(route.getDst_airport().getId());
             node.addDestination(adjNode, route.getPrice());
             graph.addNode(adjNode);
             if (route.getDst_airport().getInbound_routes() != null
-                    && route.getDst_airport().getInbound_routes().size() > 0) {
+                    && !route.getDst_airport().getInbound_routes().isEmpty()) {
                 createAdjNodes(graph, adjNode, route.getDst_airport().getInbound_routes());
             }
         }
@@ -106,7 +109,7 @@ public class FlightServiceImpl implements FlightService
 
         unsettledNodes.add(source);
 
-        while (unsettledNodes.size() != 0) {
+        while (!unsettledNodes.isEmpty()) {
             Node currentNode = getLowestDistanceNode(unsettledNodes);
             unsettledNodes.remove(currentNode);
             for (Map.Entry<Node, Double> adjacencyPair :
@@ -156,13 +159,13 @@ public class FlightServiceImpl implements FlightService
 
     private List<Long> getDstAirportIds(Long destinationCityId) throws CityNotFoundException {
         Optional<City> city = cityService.findById(destinationCityId);
-        if (!city.isPresent()) {
+        if (city.isEmpty()) {
             throw new CityNotFoundException("Chosen destination city not exists!");
         }
 
         List<Airport> airports = city.get().getAirports();
 
-        return airports.stream().map(airport -> airport.getId()).collect(Collectors.toList());
+        return airports.stream().map(Airport::getId).collect(Collectors.toList());
     }
 
 }
