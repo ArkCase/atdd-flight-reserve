@@ -1,10 +1,8 @@
 package com.armedia.atddaccelerator.template.monolith.service.impl;
 
-import com.armedia.atddaccelerator.template.monolith.entity.Airport;
 import com.armedia.atddaccelerator.template.monolith.entity.City;
 import com.armedia.atddaccelerator.template.monolith.entity.Country;
 import com.armedia.atddaccelerator.template.monolith.repository.AirportRepository;
-import com.armedia.atddaccelerator.template.monolith.repository.CountryRepository;
 import com.armedia.atddaccelerator.template.monolith.service.AirportService;
 import com.armedia.atddaccelerator.template.monolith.service.CityService;
 import com.armedia.atddaccelerator.template.monolith.service.CountryService;
@@ -13,18 +11,18 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class ImportAirportDataService implements ImportDataService
-{
+public class ImportAirportDataService implements ImportDataService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getName());
-
-    private final CountryRepository countryRepository;
 
     private final CountryService countryService;
 
@@ -39,26 +37,30 @@ public class ImportAirportDataService implements ImportDataService
         return "airports";
     }
 
+    @Transactional
     @Override
     public List<String> importData(MultipartFile file) {
 
-        if (airportRepository.count() > 0)
-        {
+        if (airportRepository.count() > 0) {
             LOGGER.info("Airports have already been imported");
 
             return null;
         }
-        List<String> successfullyInserted = new ArrayList<>();
-
         List<List<String>> lines = parse(file);
+        var total = lines.size();
+        var count = 0;
+        List<String> successfullyInserted = new ArrayList<>(total);
+        Map<String, Country> insertedCountries = new HashMap<>();
+        Map<String, City> insertedCities = new HashMap<>();
 
         for (List<String> data : lines) {
             try {
-                Airport result = insertAirport(data);
-
+                insertAirport(data, insertedCountries, insertedCities);
                 successfullyInserted.add(data.toString());
-                LOGGER.info("INSERTED airport, id=[{}],name=[{}],iata=[{}],icao=[{}],city=[{}],country=[{}]", result.getId(), result.getName(), result.getIata(), result.getIcao(), result.getHome_city().getName(), result.getHome_country().getName());
-
+                count++;
+                if (count % 100 == 0) {
+                    LOGGER.info("Progress : {}/{}", count, total);
+                }
             } catch (Exception e) {
                 LOGGER.error("SKIPPING, unable to insert line : [{}]", data.toString());
             }
@@ -67,25 +69,27 @@ public class ImportAirportDataService implements ImportDataService
         return successfullyInserted;
     }
 
-    private Airport insertAirport(List<String> data) {
-        Country country = countryRepository.findByName(data.get(3));
-
+    private void insertAirport(List<String> data,
+                               Map<String, Country> existingCountries,
+                               Map<String, City> existingCities) {
+        var countryName = data.get(3).trim();
+        Country country = existingCountries.get(countryName);
         if (country == null) {
-
-            country = insertCountry(data.get(3));
+            country = insertCountry(countryName);
+            existingCountries.put(countryName, country);
         }
 
-        City city = null;
-        if (country.getCities() != null) {
-            city = country.getCities().stream().filter(c -> c.getName().equals(data.get(2))).findFirst().orElse(insetCity(data.get(2), country));
-        } else {
-            city = insetCity(data.get(2), country);
+        var cityName = data.get(2);
+        String key = String.format("%s-%s", country.getName().trim(), cityName.trim()).toLowerCase();
+        City city = existingCities.get(key);
+        if (city == null) {
+            city = insertCity(cityName, country);
+            existingCities.put(key, city);
         }
-
-        return airportService.save(data, city, country);
+        airportService.save(data, city, country);
     }
 
-    private City insetCity(String cityName, Country country) {
+    private City insertCity(String cityName, Country country) {
         City city = new City();
         city.setName(cityName);
         city.setCountry(country);

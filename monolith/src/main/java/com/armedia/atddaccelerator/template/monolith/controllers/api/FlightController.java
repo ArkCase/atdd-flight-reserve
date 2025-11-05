@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 //import javax.annotation.security.RolesAllowed;
 
 @RestController
-@RequestMapping("/flights")
+@RequestMapping("/api/flights")
 @RequiredArgsConstructor
 public class FlightController {
 

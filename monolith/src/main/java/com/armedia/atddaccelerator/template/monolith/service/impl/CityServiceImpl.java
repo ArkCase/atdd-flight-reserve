@@ -11,8 +11,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CityServiceImpl implements CityService
-{
+public class CityServiceImpl implements CityService {
 
     private final CityRepository cityRepository;
 

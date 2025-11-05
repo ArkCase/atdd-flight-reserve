@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/data")
+@RequestMapping("/api/data")
 @RequiredArgsConstructor
 public class ImportDataController {
     private final ImportDataAbstractFactory importDataFactory;
@@ -26,6 +26,6 @@ public class ImportDataController {
         List<String> result = importDataFactory.getImportDataService(name).importData(file);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(result);
+                .body(result.size());
     }
 }

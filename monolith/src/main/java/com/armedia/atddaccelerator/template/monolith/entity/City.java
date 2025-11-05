@@ -23,6 +23,7 @@ import jakarta.persistence.Table;
 import java.util.List;
 
 @Data
+@ToString(exclude = {"country", "airports"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
