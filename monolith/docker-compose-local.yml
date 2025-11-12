@@ -18,11 +18,6 @@ services:
     ports:
       - "8083:8080"   # Web app
       - "5005:5005"   # Debug port
-    #volumes:
-      # Mount JAR for rebuild-free updates
-     # - ./build/libs/flight-atdd-0.0.1-SNAPSHOT.jar:/app/app.jar
-      # Optional: Mount source for live reload (if using devtools)
-      # - ./src:/app/src
     command: >
       sh -c '
         echo "🧩 Waiting for MySQL...";
