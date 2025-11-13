@@ -40,4 +40,11 @@ public class AirportServiceImpl implements AirportService
     public Optional<Airport> findById(Long id) {
         return airportRepository.findById(id);
     }
+
+    @Override
+    public List<Airport> findByCityIdAndCountryId(Integer cityId, Integer countryId)
+    {
+
+        return airportRepository.findByCityAndCountry(cityId, countryId);
+    }
 }
