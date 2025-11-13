@@ -7,19 +7,31 @@ services:
       DB_PORT: 3306
       DB_USERNAME: fl_advisor
       DB_PASSWORD: fl_advisor
-    ports:
-      - "8080:8080"
+    volumes:
+      - ./src/main/resources/db/migration/data:/app/data
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8083:8080"
+    command: >
+      sh -c '
+        echo "🧩 Waiting for MySQL...";
+        until nc -z mysql 3306; do sleep 2; done;'
 
   mysql:
-    image: "mysql:8.0"
-    command: --init-file /data/application/init.sql
+    image: mysql:8.0
     environment:
-      MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: flight_atdd
+    command: --local-infile=1 --init-file /docker-entrypoint-initdb.d/database.sql
     ports:
       - "3307:3306"
     volumes:
       - ./volumes/mysql:/var/lib/mysql
       - ./db-init/database.sql:/docker-entrypoint-initdb.d/database.sql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-psecret" ]
+      interval: 5s
+      retries: 10
+      timeout: 5s

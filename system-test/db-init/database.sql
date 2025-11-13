@@ -1,5 +1,7 @@
-CREATE DATABASE IF NOT EXISTS `flight_advisor`;
+CREATE DATABASE IF NOT EXISTS flight_atdd character set utf8mb4 collate utf8mb4_bin;
 
-GRANT ALL PRIVILEGES ON flight_advisor.* TO 'fl_advisor'@'%' identified by 'fl_advisor';
+CREATE USER IF NOT EXISTS 'fl_advisor'@'%' IDENTIFIED WITH caching_sha2_password BY 'fl_advisor';
+
+GRANT ALL PRIVILEGES ON flight_atdd.* TO 'fl_advisor'@'%';
 
 FLUSH PRIVILEGES;
