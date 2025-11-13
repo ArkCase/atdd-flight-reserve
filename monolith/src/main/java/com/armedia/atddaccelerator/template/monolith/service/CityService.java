@@ -13,4 +13,5 @@ public interface CityService {
     List<City> findCitiesByName(String name);
 
     List<City> findAllCities();
+
 }

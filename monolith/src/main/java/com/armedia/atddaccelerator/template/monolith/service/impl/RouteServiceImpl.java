@@ -20,4 +20,10 @@ public class RouteServiceImpl implements RouteService {
         Route route = routeRepository.buildRoute(rawData, airline, srcAirport, dstAirport);
         return routeRepository.save(route);
     }
+
+    @Override
+    public List<Route> findBySrcAirportIdAndDstAirportId(Integer srcAirportId, Integer dstAirportId)
+    {
+        return routeRepository.findBySrcAndDstAirportIds(srcAirportId, dstAirportId);
+    }
 }
