@@ -11,4 +11,6 @@ public interface AirportService {
     Airport save(List<String> rawData, City city, Country country);
 
     Optional<Airport> findById(Long id);
+
+    List<Airport> findByCityIdAndCountryId(Integer cityId, Integer countryId);
 }

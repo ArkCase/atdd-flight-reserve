@@ -50,7 +50,7 @@ runs:
       with:
         url: 'http://localhost:8080/'
         max-attempts: '30'
-        wait-seconds: '10'
+        wait-seconds: '60'
         working-directory: system-test
       
     - name: Setup Java
