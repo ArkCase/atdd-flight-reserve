@@ -12,7 +12,6 @@ import java.util.List;
 public interface AirportRepository extends JpaRepository<Airport, Long> {
     Airport findByIata(String iata);
 
-    //List<Airport> findByCityIdAndCountryId(Integer cityId, Integer countryId);
 
     @Query("SELECT a FROM Airport a WHERE a.home_city.id = :cityId AND a.home_country.id = :countryId")
     List<Airport> findByCityAndCountry(@Param("cityId") Integer cityId,
