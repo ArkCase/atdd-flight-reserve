@@ -13,8 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/routes")
 @RequiredArgsConstructor
-public class RouteController
-{
+public class RouteController {
 
     private final RouteService routeService;
 

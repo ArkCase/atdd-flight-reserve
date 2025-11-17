@@ -4,25 +4,30 @@ import com.armedia.atddaccelerator.template.monolith.entity.dto.Graph;
 import com.armedia.atddaccelerator.template.monolith.entity.dto.Node;
 import com.armedia.atddaccelerator.template.monolith.repository.AirportRepository;
 import com.armedia.atddaccelerator.template.monolith.repository.CityRepository;
+import com.armedia.atddaccelerator.template.monolith.repository.CountryRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.mockito.Mock;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class FlightServiceImplTest
-{
-
-    private AirportRepository airportRepository = Mockito.mock(AirportRepository.class);
-    private CityRepository cityRepository = Mockito.mock(CityRepository.class);
+public class FlightServiceImplTest {
+    @Mock
+    private AirportRepository airportRepository;
+    @Mock
+    private CityRepository cityRepository;
+    @Mock
+    private CountryRepository countryRepository;
     private FlightServiceImpl flightService;
 
     @BeforeEach
     void init() {
-        this.flightService = new FlightServiceImpl(new AirportServiceImpl(airportRepository), new CityServiceImpl(cityRepository));
+        this.flightService = new FlightServiceImpl(new AirportServiceImpl(airportRepository),
+                new CityServiceImpl(cityRepository, countryRepository, airportRepository));
     }
 
     @Test
@@ -63,12 +68,15 @@ public class FlightServiceImplTest
 
         List<Node> shortestPathForMontreal = Arrays.asList(skopje, belgrade, berlin);
 
-        Node calculated = graph.getNodes().stream().filter(x -> x.getName().equals(montreal.getName())).findFirst().orElse(null);
+        Node calculated = graph.getNodes()
+                .stream()
+                .filter(x -> x.getName().equals(montreal.getName()))
+                .findFirst()
+                .orElse(null);
 
-        assertTrue(calculated
-                .getShortestPath()
-                .equals(shortestPathForMontreal));
-        assertTrue(calculated.getCost()
-                .equals(17.0));
+        Assertions.assertNotNull(calculated);
+        assertEquals(calculated
+                .getShortestPath(), shortestPathForMontreal);
+        assertEquals(17.0, calculated.getCost());
     }
 }
