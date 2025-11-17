@@ -2,7 +2,7 @@ package com.armedia.atddaccelerator.template.monolith.controllers.api;
 
 import com.armedia.atddaccelerator.template.monolith.entity.Airport;
 import com.armedia.atddaccelerator.template.monolith.service.AirportService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,10 +12,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/airports")
-public class AirtportController
+@RequiredArgsConstructor
+public class AirportController
 {
-    @Autowired
-    AirportService airportService;
+
+    private final AirportService airportService;
 
     @GetMapping("/by")
     public List<Airport> getAirportsByCityAndCountry(

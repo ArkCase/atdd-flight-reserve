@@ -9,11 +9,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AirportRepository extends JpaRepository<Airport, Long> {
-    Airport findByIata(String iata);
+public interface AirportRepository extends JpaRepository<Airport, Long>
+{
 
+    Airport findByIata(String iata);
 
     @Query("SELECT a FROM Airport a WHERE a.home_city.id = :cityId AND a.home_country.id = :countryId")
     List<Airport> findByCityAndCountry(@Param("cityId") Integer cityId,
             @Param("countryId") Integer countryId);
+
 }
