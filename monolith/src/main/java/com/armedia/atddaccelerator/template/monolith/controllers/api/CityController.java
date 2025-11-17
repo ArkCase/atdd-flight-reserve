@@ -21,7 +21,7 @@ import java.util.List;
 public class CityController {
     private final CityService cityService;
 
-    @GetMapping("{name}")
+    @GetMapping("/by-name{name}")
     public List<CityDTO> findByName(@PathVariable String name) {
         return cityService.findCitiesByName(name)
                 .stream()

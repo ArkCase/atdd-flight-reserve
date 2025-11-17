@@ -33,6 +33,4 @@ logging:
   level:
     org.flywaydb: DEBUG
 
-todos:
-  api:
-    host: ${TODOS_API_HOST:https://jsonplaceholder.typicode.com}
+
