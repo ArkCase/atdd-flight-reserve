@@ -20,7 +20,7 @@ class ApiE2eTest {
 
         // Arrange
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder().uri(new URI("http://localhost:8080/api/cities/Skopje")).GET().build();
+        HttpRequest request = HttpRequest.newBuilder().uri(new URI("http://localhost:8080/api/cities/by-name/Skopje")).GET().build();
         // Act
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
