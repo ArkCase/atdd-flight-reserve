@@ -13,7 +13,7 @@ services:
       mysql:
         condition: service_healthy
     ports:
-      - "8083:8080"
+      - "8080:8080"
     command: >
       sh -c '
         echo "🧩 Waiting for MySQL...";

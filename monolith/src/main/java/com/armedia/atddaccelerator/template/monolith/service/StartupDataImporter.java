@@ -35,7 +35,10 @@ public class StartupDataImporter  implements ApplicationListener<ApplicationRead
                 .importData(multipartFile);
 
 
-        LOGGER.info("Import completed for airports with total records: " + result.size());
+        if (result != null)
+        {
+            LOGGER.info("Import completed for airports with total records: " + result.size());
+        }
 
         File fileRoutes = new File("/app/data/routes.txt");
         MultipartFile multipartFileRoute = new FileSystemMultipartFile(fileRoutes);
@@ -44,7 +47,10 @@ public class StartupDataImporter  implements ApplicationListener<ApplicationRead
                 .getImportDataService("routes")
                 .importData(multipartFileRoute);
 
-       LOGGER.info("Import completed for routes with total records: " + resultRoutes.size());
+        if (resultRoutes != null)
+        {
+            LOGGER.info("Import completed for routes with total records: " + resultRoutes.size());
+        }
 
     }
 

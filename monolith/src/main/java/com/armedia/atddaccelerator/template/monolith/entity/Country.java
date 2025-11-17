@@ -34,6 +34,6 @@ public class Country {
     @OneToMany(mappedBy = "country")
     private List<City> cities;
 
-    @OneToMany(mappedBy = "home_country")
+    @OneToMany(mappedBy = "homeCountry")
     private List<Airport> airports;
 }
