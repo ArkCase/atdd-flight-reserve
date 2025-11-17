@@ -71,11 +71,11 @@ public class Airport {
 
     @ManyToOne
     @JoinColumn(name = "city_id", referencedColumnName = "id")
-    private City home_city;
+    private City homeCity;
 
     @ManyToOne
     @JoinColumn(name = "country_id", referencedColumnName = "id")
-    private Country home_country;
+    private Country homeCountry;
 
     public static AirportEntityBuilder builder() {
         return new AirportEntityBuilder();
@@ -97,8 +97,8 @@ public class Airport {
         private String source;
         private List<Route> inbound_routes;
         private List<Route> outbound_routes;
-        private City home_city;
-        private Country home_country;
+        private City homeCity;
+        private Country homeCountry;
 
         public AirportEntityBuilder id(final Long id) {
             this.id = id;
@@ -170,18 +170,19 @@ public class Airport {
             return this;
         }
 
-        public AirportEntityBuilder home_city(City home_city) {
-            this.home_city = home_city;
+        public AirportEntityBuilder homeCity(City home_city) {
+            this.homeCity = home_city;
             return this;
         }
 
-        public AirportEntityBuilder home_country(Country home_country) {
-            this.home_country = home_country;
+        public AirportEntityBuilder homeCountry(Country home_country) {
+            this.homeCountry = home_country;
             return this;
         }
 
         public Airport build() {
-            return new Airport(id, name, iata, icao, latitude, longitude, altitude, timezone, dst, tz, type, source, inbound_routes, outbound_routes, home_city, home_country);
+            return new Airport(id, name, iata, icao, latitude, longitude, altitude, timezone, dst, tz, type, source, inbound_routes, outbound_routes,
+                    homeCity, homeCountry);
         }
     }
 }

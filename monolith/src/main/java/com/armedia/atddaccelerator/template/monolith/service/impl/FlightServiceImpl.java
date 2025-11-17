@@ -152,8 +152,8 @@ public class FlightServiceImpl implements FlightService
 
     private CheapestFlightRoute createResponse(Node minCostNode) {
         List<String> citiesOnRoute = minCostNode.getShortestPath().stream()
-                .map(node -> airportService.findById(node.getName()).get().getHome_city().getName()).collect(Collectors.toList());
-        citiesOnRoute.add(airportService.findById(minCostNode.getName()).get().getHome_city().getName());
+                .map(node -> airportService.findById(node.getName()).get().getHomeCity().getName()).collect(Collectors.toList());
+        citiesOnRoute.add(airportService.findById(minCostNode.getName()).get().getHomeCity().getName());
         return new CheapestFlightRoute(citiesOnRoute, minCostNode.getCost());
     }
 

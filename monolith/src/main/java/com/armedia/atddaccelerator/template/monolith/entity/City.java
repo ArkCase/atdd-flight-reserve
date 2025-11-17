@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 import jakarta.persistence.Column;
@@ -47,6 +44,6 @@ public class City {
     @OneToMany(mappedBy = "city")
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "home_city")
+    @OneToMany(mappedBy = "homeCity")
     private List<Airport> airports;
 }
