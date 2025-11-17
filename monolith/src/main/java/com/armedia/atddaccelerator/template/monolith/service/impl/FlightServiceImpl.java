@@ -26,8 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class FlightServiceImpl implements FlightService
-{
+public class FlightServiceImpl implements FlightService {
 
     private final AirportService airportService;
 
@@ -36,8 +35,7 @@ public class FlightServiceImpl implements FlightService
     private Node sourceNode;
 
     public CheapestFlightRoute findShortestCostPath(Long sourceCityId, Long destinationCityId) throws CityNotFoundException,
-            RouteNotFoundException
-    {
+            RouteNotFoundException {
         Graph init = initRoutes(sourceCityId);
 
         Graph calculatedGraph = calculateShortestPathFromSource(init, sourceNode);
@@ -46,23 +44,22 @@ public class FlightServiceImpl implements FlightService
         List<Long> dstAirportIds = getDstAirportIds(destinationCityId);
 
         //get all destination nodes from the calculated graph
-        List<Node> destNodes = calculatedGraph.getNodes().stream().filter(node -> dstAirportIds.contains(node.getName())).collect(Collectors.toList());
+        List<Node> destNodes = calculatedGraph.getNodes()
+                .stream()
+                .filter(node -> dstAirportIds.contains(node.getName()))
+                .toList();
+
         if (!destNodes.isEmpty()) {
             // find the node with the lowest cost.
             Node minCostNode = destNodes
                     .stream()
-                    .min(Comparator.comparing(n -> n.getShortestPath().size()))
+                    .min(Comparator.comparing(Node::getCost))
                     .orElseThrow(NoSuchElementException::new);
 
             return createResponse(minCostNode);
         }
 
         throw new RouteNotFoundException(String.format("Sorry, we don't find any route between %s and %s ", sourceCityId, destinationCityId));
-    }
-
-    public void test (Long sourceCityId, Long destinationCityId)
-    {
-
     }
 
     private Graph initRoutes(Long sourceCityId) throws CityNotFoundException {
@@ -140,7 +137,7 @@ public class FlightServiceImpl implements FlightService
     }
 
     private void calculateMinimumDistance(Node evaluationNode,
-            Double edgeWeigh, Node sourceNode) {
+                                          Double edgeWeigh, Node sourceNode) {
         Double sourceDistance = sourceNode.getCost();
         if (sourceDistance + edgeWeigh < evaluationNode.getCost()) {
             evaluationNode.setCost(sourceDistance + edgeWeigh);
@@ -165,7 +162,9 @@ public class FlightServiceImpl implements FlightService
 
         List<Airport> airports = city.get().getAirports();
 
-        return airports.stream().map(Airport::getId).collect(Collectors.toList());
+        return airports.stream()
+                .map(Airport::getId)
+                .collect(Collectors.toList());
     }
 
 }
