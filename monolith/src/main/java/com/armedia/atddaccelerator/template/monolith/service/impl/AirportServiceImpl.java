@@ -21,8 +21,8 @@ public class AirportServiceImpl implements AirportService
     public Airport save(List<String> rawData, City city, Country country) {
         Airport airport = Airport.builder()
                 .name(rawData.get(1))
-                .home_city(city)
-                .home_country(country)
+                .homeCity(city)
+                .homeCountry(country)
                 .iata(rawData.get(4))
                 .icao(rawData.get(5))
                 .latitude(Double.parseDouble(rawData.get(6)))
@@ -44,6 +44,6 @@ public class AirportServiceImpl implements AirportService
     @Override
     public List<Airport> findByCityIdAndCountryId(Integer cityId, Integer countryId)
     {
-        return airportRepository.findByCityAndCountry(cityId, countryId);
+        return airportRepository.findAirportsByHomeCity_IdAndHomeCountry_Id(Long.valueOf(cityId), Long.valueOf(countryId));
     }
 }
