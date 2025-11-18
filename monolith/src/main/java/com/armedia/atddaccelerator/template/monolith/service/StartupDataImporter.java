@@ -1,57 +1,47 @@
 package com.armedia.atddaccelerator.template.monolith.service;
 
 import com.armedia.atddaccelerator.template.monolith.service.factory.ImportDataAbstractFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.ApplicationListener;
-
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 @Component
-public class StartupDataImporter  implements ApplicationListener<ApplicationReadyEvent>
-{
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getName());
+public class StartupDataImporter implements ApplicationRunner {
     private final ImportDataAbstractFactory importDataFactory;
 
-    public StartupDataImporter(ImportDataAbstractFactory importDataFactory)
-    {
+    public StartupDataImporter(ImportDataAbstractFactory importDataFactory) {
         this.importDataFactory = importDataFactory;
     }
 
 
     @Override
-    public void onApplicationEvent(ApplicationReadyEvent event)
-    {
+    public void run(ApplicationArguments args) throws Exception {
         File file = new File("/app/data/airports.txt");
         MultipartFile multipartFile = new FileSystemMultipartFile(file);
-
-        List<String> result = importDataFactory
-                .getImportDataService("airports")
-                .importData(multipartFile);
-
-
-        if (result != null)
-        {
-            LOGGER.info("Import completed for airports with total records: " + result.size());
-        }
 
         File fileRoutes = new File("/app/data/routes.txt");
         MultipartFile multipartFileRoute = new FileSystemMultipartFile(fileRoutes);
 
-        List<String> resultRoutes = importDataFactory
-                .getImportDataService("routes")
-                .importData(multipartFileRoute);
-
-        if (resultRoutes != null)
-        {
-            LOGGER.info("Import completed for routes with total records: " + resultRoutes.size());
-        }
-
+        CompletableFuture
+                .supplyAsync(() -> importDataFactory
+                        .getImportDataService("airports")
+                        .importData(multipartFile).size())
+                .thenApply(airportsCount -> {
+                    log.info("Imported {} airports", airportsCount);
+                    return importDataFactory
+                            .getImportDataService("routes")
+                            .importData(multipartFileRoute).size();
+                })
+                .thenAccept(routesCount -> log.info("Imported {} routes", routesCount))
+                .exceptionally(ex -> {
+                    log.error("Import failed at some step", ex);
+                    return null;
+                });
     }
-
 }
