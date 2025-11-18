@@ -41,7 +41,7 @@ public class ImportRoutesDataService implements ImportDataService {
 
         if (routeRepository.count() > 0) {
             LOGGER.info("Routes have already been imported");
-            return null;
+            return List.of();
         }
 
         List<List<String>> lines = parse(file);
