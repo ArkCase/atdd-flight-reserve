@@ -26,7 +26,6 @@ public class StartupDataImporter  implements ApplicationListener<ApplicationRead
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event)
     {
-        new Thread(() -> {
             try
             {
                 File file = new File("/app/data/airports.txt");
@@ -57,7 +56,7 @@ public class StartupDataImporter  implements ApplicationListener<ApplicationRead
             {
                 LOGGER.error("Error during background import", e);
             }
-        }).start();
+
 
     }
 
