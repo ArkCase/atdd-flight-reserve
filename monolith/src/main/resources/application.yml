@@ -33,4 +33,9 @@ logging:
   level:
     org.flywaydb: DEBUG
 
+frs:
+  host: ${EXTERNAL_API_URL}
+  access-key: ${EXTERNAL_API_KEY}
+
+
 

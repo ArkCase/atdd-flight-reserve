@@ -44,7 +44,7 @@ public class ImportAirportDataService implements ImportDataService {
         if (airportRepository.count() > 0) {
             LOGGER.info("Airports have already been imported");
 
-            return null;
+            return List.of();
         }
         List<List<String>> lines = parse(file);
         var total = lines.size();
