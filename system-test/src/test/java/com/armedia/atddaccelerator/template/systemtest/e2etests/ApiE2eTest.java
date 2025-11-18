@@ -13,6 +13,27 @@ import java.net.http.HttpResponse;
 class ApiE2eTest {
 
     @Test
+    void getTaxesFromExternalAPI_shouldReturnOK() throws Exception {
+        // DISCLAIMER: This is an example of a badly written test
+        // which unfortunately simulates real-life software test projects.
+        // This is the starting point for our ATDD Accelerator exercises.
+
+        // Arrange
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder().uri(new URI("http://localhost:8080/api/taxes/info")).GET().build();
+        // Act
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        // Assert
+        assertEquals(200, response.statusCode());
+
+        String responseBody = response.body();
+
+        // Verify JSON structure contains expected fields
+        assertTrue(responseBody.contains("data"));
+    }
+
+    @Test
     void getCitiesByName_shouldReturnWithExpectedFormat() throws Exception {
         // DISCLAIMER: This is an example of a badly written test
         // which unfortunately simulates real-life software test projects.
