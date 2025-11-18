@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.List;
 
 @Component
-public class StartupDataImporter  //implements ApplicationListener<ApplicationReadyEvent>
+public class StartupDataImporter  implements ApplicationListener<ApplicationReadyEvent>
 {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getName());
     private final ImportDataAbstractFactory importDataFactory;
@@ -23,7 +23,7 @@ public class StartupDataImporter  //implements ApplicationListener<ApplicationRe
         this.importDataFactory = importDataFactory;
     }
 
-  /*  @Override
+    @Override
     public void onApplicationEvent(ApplicationReadyEvent event)
     {
             try
@@ -58,7 +58,6 @@ public class StartupDataImporter  //implements ApplicationListener<ApplicationRe
             }
 
 
-    }*/
-
+    }
 }
 

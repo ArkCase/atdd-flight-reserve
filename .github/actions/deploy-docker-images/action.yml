@@ -48,8 +48,8 @@ runs:
     - name: Wait for Application to be Ready
       uses: optivem/wait-for-docker-compose-action@v1
       with:
-        url: 'http://localhost:8080/'
-        max-attempts: '30'
+        url: 'http://localhost:8080/api/echo'
+        max-attempts: '3'
         wait-seconds: '60'
         working-directory: system-test
       
