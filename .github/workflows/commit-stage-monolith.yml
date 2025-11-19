@@ -52,6 +52,11 @@ jobs:
       shell: bash
       working-directory: monolith
 
+    - name: Debug Environment Variables
+      run: |
+        echo "EXTERNAL_API_URL is set: ${{ secrets.EXTERNAL_API_URL != '' }}"
+        echo "EXTERNAL_API_KEY is set: ${{ secrets.EXTERNAL_API_KEY != '' }}"
+
     - name: Build with Gradle Wrapper
       env:
         EXTERNAL_API_URL: ${{ secrets.EXTERNAL_API_URL }}

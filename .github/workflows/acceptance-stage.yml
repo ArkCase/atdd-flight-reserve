@@ -100,11 +100,14 @@ jobs:
       run: echo "Run External System Contract Tests"
 
     - name: Run E2E Tests
-      run: ./gradlew test --tests com.armedia.atddaccelerator.template.systemtest.e2etests.*
       working-directory: system-test
       env:
         EXTERNAL_API_URL: ${{ secrets.EXTERNAL_API_URL }}
         EXTERNAL_API_KEY: ${{ secrets.EXTERNAL_API_KEY }}
+      run: |
+        export EXTERNAL_API_URL=$(echo $EXTERNAL_API_URL | tr -d '"')
+        export EXTERNAL_API_KEY=$(echo $EXTERNAL_API_KEY | tr -d '"')
+        ./gradlew test --tests com.armedia.atddaccelerator.template.systemtest.e2etests.*
 
     - name: Upload Test Reports
       if: always()  # Upload even if tests fail
