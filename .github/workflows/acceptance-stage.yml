@@ -102,6 +102,15 @@ jobs:
     - name: Run E2E Tests
       run: ./gradlew test --tests com.armedia.atddaccelerator.template.systemtest.e2etests.*
       working-directory: system-test
+
+    - name: Upload Test Reports
+      if: always()  # Upload even if tests fail
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-reports
+        path: system-test/build/reports/tests/test/
+        retention-days: 7
+
   
   prerelease:
     needs: [find-latest-images, should-run, system-test]
