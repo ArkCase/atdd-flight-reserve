@@ -54,7 +54,7 @@ jobs:
 
     - name: Build with Gradle Wrapper
       env:
-        URL: ${{ secrets.EXTERNAL_API_URL }}
+        EXTERNAL_API_URL: ${{ secrets.EXTERNAL_API_URL }}
         EXTERNAL_API_KEY: ${{ secrets.EXTERNAL_API_KEY }}
       run: ./gradlew build
       working-directory: monolith
