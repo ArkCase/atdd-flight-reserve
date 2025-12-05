@@ -4,6 +4,7 @@ import com.armedia.atddaccelerator.template.monolith.entity.Airport;
 import com.armedia.atddaccelerator.template.monolith.service.AirportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,10 +19,10 @@ public class AirportController
 
     private final AirportService airportService;
 
-    @GetMapping("/by")
+    @GetMapping("/by/{cityId}/{countryId}")
     public List<Airport> getAirportsByCityAndCountry(
-            @RequestParam("cityId") Integer cityId,
-            @RequestParam("countryId") Integer countryId)
+            @PathVariable("cityId") Integer cityId,
+            @PathVariable("countryId") Integer countryId)
     {
         return airportService.findByCityIdAndCountryId(cityId, countryId);
     }

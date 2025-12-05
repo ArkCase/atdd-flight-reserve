@@ -1,6 +1,6 @@
 package com.armedia.atddaccelerator.template.monolith.controllers.api;
 
-import com.armedia.atddaccelerator.template.monolith.entity.Route;
+import com.armedia.atddaccelerator.template.monolith.controllers.api.dto.RouteDTO;
 import com.armedia.atddaccelerator.template.monolith.service.RouteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +18,7 @@ public class RouteController {
     private final RouteService routeService;
 
     @GetMapping("/by/{srcAirportId}/{dstAirportId}")
-    public List<Route> getRoutesBySrcAndDst(
+    public List<RouteDTO> getRoutesBySrcAndDst(
             @PathVariable Integer srcAirportId,
             @PathVariable Integer dstAirportId) {
 

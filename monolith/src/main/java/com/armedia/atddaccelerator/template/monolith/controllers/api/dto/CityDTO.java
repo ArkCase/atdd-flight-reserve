@@ -21,10 +21,11 @@ public record CityDTO(
         return new CityDTO(
                 city.getId(),
                 city.getName(),
-                city.getAirports()
-                        .stream()
-                        .map(Airport::getName)
-                        .toList(),
+                city.getAirports() != null ?
+                        city.getAirports()
+                                .stream()
+                                .map(Airport::getName)
+                                .toList() : List.of(),
                 city.getCountry() != null ?
                         CountryDTO.toDTO(city.getCountry()) : null);
     }
