@@ -1,6 +1,7 @@
 package com.armedia.atddaccelerator.template.monolith.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,6 +26,7 @@ import java.util.List;
 @Entity
 @Table(name = "airport")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIgnoreProperties({"homeCity", "homeCountry", "inbound_routes", "outbound_routes"})
 public class Airport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

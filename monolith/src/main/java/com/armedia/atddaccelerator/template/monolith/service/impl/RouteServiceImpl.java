@@ -1,5 +1,6 @@
 package com.armedia.atddaccelerator.template.monolith.service.impl;
 
+import com.armedia.atddaccelerator.template.monolith.controllers.api.dto.RouteDTO;
 import com.armedia.atddaccelerator.template.monolith.entity.Airline;
 import com.armedia.atddaccelerator.template.monolith.entity.Airport;
 import com.armedia.atddaccelerator.template.monolith.entity.Route;
@@ -22,8 +23,8 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public List<Route> findBySrcAirportIdAndDstAirportId(Integer srcAirportId, Integer dstAirportId)
-    {
-        return routeRepository.findBySrcAndDstAirportIds(srcAirportId, dstAirportId);
+    public List<RouteDTO> findBySrcAirportIdAndDstAirportId(Integer srcAirportId, Integer dstAirportId) {
+        List<Route> routes = routeRepository.findBySrcAndDstAirportIds(srcAirportId, dstAirportId);
+        return routes.stream().map(RouteDTO::from).toList();
     }
 }

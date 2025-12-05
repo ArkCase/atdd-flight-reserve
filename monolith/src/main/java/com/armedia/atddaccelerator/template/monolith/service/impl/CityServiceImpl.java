@@ -1,7 +1,7 @@
 package com.armedia.atddaccelerator.template.monolith.service.impl;
 
 import com.armedia.atddaccelerator.template.monolith.controllers.api.dto.CityDTO;
-import com.armedia.atddaccelerator.template.monolith.entity.Airport;
+import com.armedia.atddaccelerator.template.monolith.controllers.api.dto.CreateCityDTO;
 import com.armedia.atddaccelerator.template.monolith.entity.City;
 import com.armedia.atddaccelerator.template.monolith.entity.Country;
 import com.armedia.atddaccelerator.template.monolith.repository.AirportRepository;
@@ -9,11 +9,12 @@ import com.armedia.atddaccelerator.template.monolith.repository.CityRepository;
 import com.armedia.atddaccelerator.template.monolith.repository.CountryRepository;
 import com.armedia.atddaccelerator.template.monolith.service.CityService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,26 +25,12 @@ public class CityServiceImpl implements CityService {
     private final AirportRepository airportRepository;
 
     @Override
-    public City save(CityDTO cityDto) {
+    public City save(CreateCityDTO cityDto) {
         City city = new City();
         city.setName(cityDto.name());
-        if (cityDto.country() != null) {
-            Country country = new Country();
-            country.setName(cityDto.country().name());
-            countryRepository.save(country);
-            city.setCountry(country);
-        }
-        if (cityDto.airports() != null) {
-            List<Airport> airports = new ArrayList<>();
-            cityDto.airports().forEach(arp -> {
-                Airport airport = Airport.builder()
-                        .name(arp)
-                        .build();
-                airportRepository.save(airport);
-                airports.add(airport);
-            });
-            city.setAirports(airports);
-        }
+        Country country = countryRepository.findById(cityDto.countryId()).orElseThrow();
+        city.setCountry(country);
+        city.setDescription(cityDto.description());
         return cityRepository.save(city);
     }
 
@@ -68,6 +55,15 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public List<City> findAllCities() {
-        return cityRepository.findAll();
+        return cityRepository.findAll(Pageable.ofSize(100)).getContent();
+    }
+
+    public List<CityDTO> searchByCountryAndName(Long countryId, String query, int limit) {
+        List<City> cities = cityRepository.searchByCountryAndName(countryId, query);
+
+        return cities.stream()
+                .limit(limit)
+                .map(CityDTO::from)
+                .collect(Collectors.toList());
     }
 }
