@@ -1,0 +1,242 @@
+<div class="city-management-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>City Management</mat-card-title>
+      <mat-card-subtitle>Add and search cities</mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content>
+      
+      <!-- Add City Form -->
+      <div class="add-city-section">
+        <h3>
+          <mat-icon>add_location</mat-icon>
+          Add New City
+        </h3>
+        
+        <div class="form-row">
+          <!-- City Name -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>City Name</mat-label>
+            <input 
+              matInput 
+              [formControl]="cityNameControl"
+              placeholder="Enter city name"
+              required>
+            <mat-icon matPrefix>location_city</mat-icon>
+          </mat-form-field>
+
+          <!-- Country Autocomplete -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Country</mat-label>
+            <input 
+              type="text"
+              matInput
+              [formControl]="countryControl"
+              [matAutocomplete]="countryAuto"
+              placeholder="Type to search countries..."
+              required>
+            <mat-icon matPrefix>public</mat-icon>
+            <mat-autocomplete 
+              #countryAuto="matAutocomplete" 
+              [displayWith]="displayCountry"
+              (optionSelected)="onCountrySelected($event.option.value)">
+              <mat-option *ngFor="let country of filteredCountries$ | async" [value]="country">
+                {{ country.name }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-hint>Start typing country name</mat-hint>
+          </mat-form-field>
+
+          <!-- Description -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Description (Optional)</mat-label>
+            <input 
+              matInput 
+              [formControl]="descriptionControl"
+              placeholder="Enter description">
+            <mat-icon matPrefix>description</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <!-- Add Button -->
+        <div class="button-row">
+          <button 
+            mat-raised-button 
+            color="primary" 
+            (click)="addCity()"
+            [disabled]="addingCity || !cityNameControl.value || !selectedCountry">
+            <mat-icon>add</mat-icon>
+            Add City
+          </button>
+          <button 
+            mat-raised-button 
+            (click)="resetForm()">
+            <mat-icon>clear</mat-icon>
+            Clear
+          </button>
+        </div>
+
+        <!-- Loading Spinner for Add -->
+        <div class="loading-container" *ngIf="addingCity">
+          <mat-spinner diameter="40"></mat-spinner>
+          <span class="loading-text">Adding city...</span>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Search Cities Section -->
+      <div class="search-cities-section">
+        <h3>
+          <mat-icon>search</mat-icon>
+          Search Cities
+        </h3>
+
+        <div class="search-row">
+          <!-- Search Country -->
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Country</mat-label>
+            <input 
+              type="text"
+              matInput
+              [formControl]="searchCountryControl"
+              [matAutocomplete]="searchCountryAuto"
+              placeholder="Select country...">
+            <mat-icon matPrefix>public</mat-icon>
+            <mat-autocomplete 
+              #searchCountryAuto="matAutocomplete" 
+              [displayWith]="displayCountry"
+              (optionSelected)="onSearchCountrySelected($event.option.value)">
+              <mat-option *ngFor="let country of filteredSearchCountries$ | async" [value]="country">
+                {{ country.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <!-- Search City Name -->
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>City Name</mat-label>
+            <input 
+              matInput 
+              [formControl]="searchCityControl"
+              placeholder="Type at least 2 characters..."
+              [disabled]="!selectedSearchCountry">
+            <mat-icon matPrefix>location_city</mat-icon>
+            <mat-hint *ngIf="selectedSearchCountry">Search in {{ selectedSearchCountry.name }}</mat-hint>
+            <mat-hint *ngIf="!selectedSearchCountry">Select a country first</mat-hint>
+          </mat-form-field>
+
+          <!-- Search Buttons -->
+          <div class="search-buttons">
+            <button 
+              mat-raised-button 
+              color="primary"
+              (click)="searchCities()"
+              [disabled]="searchingCities || !selectedSearchCountry || !searchCityControl.value">
+              <mat-icon>search</mat-icon>
+              Search
+            </button>
+            <button 
+              mat-raised-button
+              (click)="clearSearch()">
+              <mat-icon>clear</mat-icon>
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <!-- Loading Spinner for Search -->
+        <div class="loading-container" *ngIf="searchingCities">
+          <mat-spinner diameter="40"></mat-spinner>
+          <span class="loading-text">Searching cities...</span>
+        </div>
+
+        <!-- Initial Message -->
+        <div class="initial-message" *ngIf="!hasSearched && !searchingCities">
+          <mat-icon>info</mat-icon>
+          <p>Select a country and enter a city name to search</p>
+        </div>
+      </div>
+
+      <mat-divider *ngIf="hasSearched"></mat-divider>
+
+      <!-- Cities Table -->
+      <div class="cities-table-section" *ngIf="hasSearched">
+        <h3>
+          <mat-icon>list</mat-icon>
+          Search Results ({{ cities.length }})
+        </h3>
+
+        <!-- Error Message -->
+        <div class="error-message" *ngIf="error && !searchingCities">
+          <mat-card class="error-card">
+            <mat-icon>error</mat-icon>
+            {{ error }}
+          </mat-card>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container" *ngIf="!searchingCities && !error">
+          <table mat-table [dataSource]="cities" class="cities-table">
+            
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>ID</th>
+              <td mat-cell *matCellDef="let city">{{ city.id }}</td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>City Name</th>
+              <td mat-cell *matCellDef="let city">
+                <strong>{{ city.name }}</strong>
+              </td>
+            </ng-container>
+
+            <!-- Country Column -->
+            <ng-container matColumnDef="country">
+              <th mat-header-cell *matHeaderCellDef>Country</th>
+              <td mat-cell *matCellDef="let city">{{ city.country.name }}</td>
+            </ng-container>
+
+            <!-- Airports Column -->
+            <ng-container matColumnDef="airports">
+              <th mat-header-cell *matHeaderCellDef>Airports</th>
+              <td mat-cell *matCellDef="let city">
+                <span class="airports-cell">
+                  {{ getAirportsDisplay(city.airports) }}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let city">
+                <button 
+                  mat-icon-button 
+                  color="warn"
+                  (click)="deleteCity(city)"
+                  [disabled]="loading"
+                  matTooltip="Delete city">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+
+          <!-- No Data Message -->
+          <div class="no-data" *ngIf="cities.length === 0">
+            <mat-icon>search_off</mat-icon>
+            <p>No cities found matching your search.</p>
+            <p class="hint">Try a different city name or search in another country.</p>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
