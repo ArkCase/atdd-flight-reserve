@@ -1,0 +1,34 @@
+mat-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.main-container {
+  min-height: calc(100vh - 64px);
+  background-color: #fafafa;
+}
+
+.main-tabs {
+  height: 100%;
+}
+
+:host ::ng-deep .mat-mdc-tab-body-content {
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+:host ::ng-deep .mat-mdc-tab-labels {
+  justify-content: center;
+}
+
+:host ::ng-deep .mat-mdc-tab {
+  min-width: 160px;
+}

@@ -1,5 +1,4 @@
 services:
-
   monolith:
     build:
       context: .
@@ -42,4 +41,13 @@ services:
       interval: 5s
       retries: 10
       timeout: 5s
+
+  client:
+    build:
+      context: ../flight-reserve-frontend/.
+      dockerfile: ../flight-reserve-frontend/Dockerfile
+    container_name: client
+    ports:
+      - "8000:80"
+
 

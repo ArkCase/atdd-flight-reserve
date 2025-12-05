@@ -1,0 +1,197 @@
+<div class="flight-search-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Search Routes</mat-card-title>
+      <mat-card-subtitle>Find available routes between two airports</mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <div class="search-form">
+        
+        <!-- SOURCE SELECTION -->
+        <div class="selection-group">
+          <h3>Source</h3>
+          
+          <!-- Source Country -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Source Country</mat-label>
+            <mat-select [(ngModel)]="sourceCountry" (selectionChange)="onSourceCountryChange()">
+              <mat-option *ngFor="let country of countries" [value]="country">
+                {{ country.name }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>public</mat-icon>
+          </mat-form-field>
+
+          <!-- Source City Autocomplete -->
+          <mat-form-field appearance="outline" class="full-width" *ngIf="sourceCountry">
+            <mat-label>Source City</mat-label>
+            <input 
+              type="text"
+              matInput
+              [formControl]="sourceCityControl"
+              [matAutocomplete]="sourceAuto"
+              placeholder="Type at least 2 characters...">
+            <mat-icon matPrefix>location_city</mat-icon>
+            <mat-autocomplete 
+              #sourceAuto="matAutocomplete" 
+              [displayWith]="displayCity"
+              (optionSelected)="onSourceCitySelected($event.option.value)">
+              <mat-option *ngFor="let city of filteredSourceCities$ | async" [value]="city">
+                {{ city.name }}, {{ city.country.name }}
+                <span class="airport-count" *ngIf="city.airports.length > 0">
+                  ({{ city.airports.length }} airports)
+                </span>
+              </mat-option>
+            </mat-autocomplete>
+            <mat-hint>Start typing to search cities in {{ sourceCountry.name }}</mat-hint>
+          </mat-form-field>
+
+          <!-- Source Airport -->
+          <mat-form-field appearance="outline" class="full-width" *ngIf="sourceAirports.length > 0">
+            <mat-label>Source Airport</mat-label>
+            <mat-select [(ngModel)]="selectedSourceAirport">
+              <mat-option *ngFor="let airport of sourceAirports" [value]="airport">
+                {{ airport.name }} ({{ airport.iata }})
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>flight_takeoff</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- DESTINATION SELECTION -->
+        <div class="selection-group">
+          <h3>Destination</h3>
+          
+          <!-- Destination Country -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Destination Country</mat-label>
+            <mat-select [(ngModel)]="destinationCountry" (selectionChange)="onDestinationCountryChange()">
+              <mat-option *ngFor="let country of countries" [value]="country">
+                {{ country.name }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>public</mat-icon>
+          </mat-form-field>
+
+          <!-- Destination City Autocomplete -->
+          <mat-form-field appearance="outline" class="full-width" *ngIf="destinationCountry">
+            <mat-label>Destination City</mat-label>
+            <input 
+              type="text"
+              matInput
+              [formControl]="destinationCityControl"
+              [matAutocomplete]="destAuto"
+              placeholder="Type at least 2 characters...">
+            <mat-icon matPrefix>location_city</mat-icon>
+            <mat-autocomplete 
+              #destAuto="matAutocomplete" 
+              [displayWith]="displayCity"
+              (optionSelected)="onDestinationCitySelected($event.option.value)">
+              <mat-option *ngFor="let city of filteredDestinationCities$ | async" [value]="city">
+                {{ city.name }}, {{ city.country.name }}
+                <span class="airport-count" *ngIf="city.airports.length > 0">
+                  ({{ city.airports.length }} airports)
+                </span>
+              </mat-option>
+            </mat-autocomplete>
+            <mat-hint>Start typing to search cities in {{ destinationCountry.name }}</mat-hint>
+          </mat-form-field>
+
+          <!-- Destination Airport -->
+          <mat-form-field appearance="outline" class="full-width" *ngIf="destinationAirports.length > 0">
+            <mat-label>Destination Airport</mat-label>
+            <mat-select [(ngModel)]="selectedDestinationAirport">
+              <mat-option *ngFor="let airport of destinationAirports" [value]="airport">
+                {{ airport.name }} ({{ airport.iata }})
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>flight_land</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="button-row">
+          <button 
+            mat-raised-button 
+            color="primary" 
+            (click)="searchRoutes()"
+            [disabled]="!selectedSourceAirport || !selectedDestinationAirport || loading">
+            <mat-icon>search</mat-icon>
+            Search Routes
+          </button>
+          <button mat-raised-button (click)="resetSearch()">
+            <mat-icon>refresh</mat-icon>
+            Reset
+          </button>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div class="loading-container" *ngIf="loading">
+          <mat-spinner diameter="50"></mat-spinner>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-message" *ngIf="error">
+          <mat-card class="error-card">
+            <mat-icon>error</mat-icon>
+            {{ error }}
+          </mat-card>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Available Routes -->
+  <mat-card *ngIf="routes.length > 0" class="routes-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>alt_route</mat-icon>
+        Available Routes ({{ routes.length }})
+      </mat-card-title>
+      <mat-card-subtitle>
+        Routes from {{ selectedSourceAirport?.iata }} to {{ selectedDestinationAirport?.iata }}
+      </mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <div class="routes-grid">
+        <div *ngFor="let route of routes; let i = index" class="route-card">
+          <div class="route-header">
+            <span class="route-number">#{{ i + 1 }}</span>
+            <mat-icon>flight</mat-icon>
+          </div>
+          <div class="route-details">
+            <div class="route-detail" *ngIf="route.airlineId">
+              <strong>Airline ID:</strong> {{ route.airlineId }}
+            </div>
+            <div class="route-detail">
+              <strong>From:</strong> {{ selectedSourceAirport?.iata }} ({{ selectedSourceAirport?.name }})
+            </div>
+            <div class="route-detail">
+              <strong>To:</strong> {{ selectedDestinationAirport?.iata }} ({{ selectedDestinationAirport?.name }})
+            </div>
+            <div class="route-detail">
+              <strong>Stops:</strong> 
+              <span [class.direct-flight]="route.stops === 0">
+                {{ route.stops === 0 ? 'Direct Flight' : route.stops + ' stop(s)' }}
+              </span>
+            </div>
+            <div class="route-detail" *ngIf="route.equipment">
+              <strong>Equipment:</strong> {{ route.equipment }}
+            </div>
+            <div class="route-detail" *ngIf="route.price">
+              <strong>Price:</strong> 
+              <span class="price">${{ route.price | number:'1.2-2' }}</span>
+            </div>
+            <div class="route-detail" *ngIf="route.codeshare">
+              <span class="codeshare-badge">Codeshare: {{ route.codeshare }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
