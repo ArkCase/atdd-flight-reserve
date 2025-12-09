@@ -23,7 +23,6 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.microsoft.playwright:playwright:1.44.0'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	testImplementation 'com.github.tomakehurst:wiremock-jre8:2.35.0'
 }
 
 tasks.named('test') {
