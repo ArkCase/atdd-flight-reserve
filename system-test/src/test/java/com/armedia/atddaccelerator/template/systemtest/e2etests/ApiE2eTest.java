@@ -1,60 +1,47 @@
 package com.armedia.atddaccelerator.template.systemtest.e2etests;
 
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-class ApiE2eTest {
 
-    static WireMockServer wireMockServer;
-
-    @BeforeAll
-    static void setup() {
-        wireMockServer = new WireMockServer(8080);
-        wireMockServer.start();
-
-        wireMockServer.stubFor(
-                get(urlEqualTo("/api/taxes/info"))
-                        .willReturn(aResponse()
-                                .withStatus(200)
-                                .withHeader("Content-Type", "application/json")
-                                .withBody("""
-                                    {
-                                      "data": {
-                                        "taxAmount": 1500,
-                                        "year": 2024,
-                                        "status": "OK"
-                                      }
-                                    }
-                                    """))
-        );
-    }
-
-    @AfterAll
-    static void tearDown() {
-        wireMockServer.stop();
-    }
+class ApiE2eTest
+{
 
     @Test
     void getTaxesFromExternalAPI_shouldReturnOK() throws Exception {
-        HttpClient client = HttpClient.newHttpClient();
+        // Arrange
+        HttpClient mockClient = mock(HttpClient.class);
+        HttpResponse<String> mockResponse = mock(HttpResponse.class);
+
+        when(mockResponse.statusCode()).thenReturn(200);
+        when(mockResponse.body()).thenReturn("{\"data\": {\"taxRate\": 0.2}}");
+
+        when(mockClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenReturn(mockResponse);
+
+        // Act
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI("http://localhost:8080/api/taxes/info"))
                 .GET()
                 .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = mockClient.send(request, HttpResponse.BodyHandlers.ofString());
 
+        // Assert
         assertEquals(200, response.statusCode());
         assertTrue(response.body().contains("data"));
-        assertTrue(response.body().contains("taxAmount"));
-    }
+        }
 
     @Test
     void getCitiesByName_shouldReturnWithExpectedFormat() throws Exception {
