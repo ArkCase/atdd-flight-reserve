@@ -79,7 +79,7 @@ class ApiE2eTest
                 .POST(HttpRequest.BodyPublishers.ofString("""
                         {
                             "name": "Test",
-                            "country": {"name":"Test"},
+                            "countryId": 54,
                             "airports": ["Test"]
                         }
                         """)).build();
