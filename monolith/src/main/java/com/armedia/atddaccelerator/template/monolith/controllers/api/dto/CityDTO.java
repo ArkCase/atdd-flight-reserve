@@ -6,7 +6,7 @@ import com.armedia.atddaccelerator.template.monolith.entity.City;
 import java.util.List;
 
 public record CityDTO(
-
+// City fields
         Long id,
         String name,
         List<String> airports,
