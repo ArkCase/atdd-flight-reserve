@@ -5,3 +5,5 @@ playwright-report/
 playwright/.cache/
 *.log
 .DS_Store
+test-results.json
+junit.xml
