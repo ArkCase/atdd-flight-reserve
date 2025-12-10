@@ -24,7 +24,9 @@ services:
     command: >
       sh -c '
         echo "🧩 Waiting for MySQL...";
-        until nc -z mysql 3306; do sleep 2; done;'
+        until nc -z mysql 3306; do sleep 2; done;
+        echo "✅ MySQL is ready! Starting application...";
+        java -jar app.jar'
 
   mysql:
     image: mysql:8.0
