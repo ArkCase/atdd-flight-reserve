@@ -1,0 +1,30 @@
+{
+    "name": "flight-reservation-playwright-tests",
+    "version": "1.0.0",
+    "description": "Playwright TypeScript tests for Flight Reservation System",
+    "main": "index.js",
+    "scripts": {
+        "test": "playwright test",
+        "test:smoke": "playwright test tests/smoke --project=chromium",
+        "test:api": "playwright test tests/api --project=chromium",
+        "test:ui": "playwright test tests/ui --project=chromium",
+        "test:headed": "playwright test --headed",
+        "test:debug": "playwright test --debug",
+        "test:report": "playwright show-report",
+        "test:codegen": "playwright codegen http://localhost:4200"
+    },
+    "keywords": [
+        "playwright",
+        "typescript",
+        "testing",
+        "e2e",
+        "api"
+    ],
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "@playwright/test": "^1.48.2",
+        "@types/node": "^22.10.1",
+        "typescript": "^5.7.2"
+    }
+}
