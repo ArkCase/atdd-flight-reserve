@@ -133,14 +133,40 @@ jobs:
       working-directory: playwright-tests
       run: npx playwright install --with-deps chromium
 
+    - name: Wait for Frontend
+      run: |
+        echo "⏳ Waiting for frontend to be ready..."
+        timeout 120 bash -c 'until curl -f http://localhost:4200; do echo "Waiting for frontend..."; sleep 3; done' || {
+          echo "❌ Frontend failed to start"
+          docker compose logs frontend
+          exit 1
+        }
+        echo "Frontend is ready!"
+      working-directory: system-test
+          
     - name: Run UI Tests
       working-directory: playwright-tests
       run: npm run test:ui -- --reporter=list,junit
+      env:
+        BASE_URL: http://localhost:4200
+
+    - name: Show Docker Logs on Failure
+      if: failure()
+      run: |
+          echo "📋 Docker Compose Services Status:"
+          docker compose ps
+          echo ""
+          echo "📋 Frontend Logs:"
+          docker compose logs frontend
+          echo ""
+          echo "📋 Backend Logs:"
+          docker compose logs monolith
+      working-directory: system-test
 
 
   prerelease:
     needs: [find-latest-images, should-run, system-test]
-    if: needs.system-test.result == 'success' && needs.ui-test.result == 'success'
+    if: needs.system-test.result == 'success'
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.generate-version.outputs.version }}
