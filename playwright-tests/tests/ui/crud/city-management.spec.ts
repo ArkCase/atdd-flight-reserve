@@ -3,8 +3,6 @@ import { CityManagementPage } from '../../../pages/cityManagementPage';
 
 /**
  * UI CRUD Test - City Management
- * 
- * Tests CRUD operations using the Page Object Model pattern
  */
 
 test.describe('City Management UI - CRUD Operations', () => {

@@ -33,18 +33,6 @@ docker compose up -d
 npm test
 ```
 
-**Run smoke tests only:**
-
-```bash
-npm run test:smoke
-```
-
-**Run API tests:**
-
-```bash
-npm run test:api
-```
-
 **Run UI tests:**
 
 ```bash
@@ -74,77 +62,28 @@ npm run test:report
 ```
 playwright-tests/
 ├── tests/
-│   ├── smoke/              # Smoke tests (health checks)
-│   │   └── api-health.spec.ts
-│   ├── api/                # API tests
-│   │   ├── cities-api.spec.ts
-│   │   ├── flights-api.spec.ts
-│   │   └── taxes-api.spec.ts
-│   └── ui/                 # UI tests (future)
-├── helpers/                # Utility functions
-│   └── api-helpers.ts
+│   └── ui/                 # UI tests
+├── pages/                  # Page Objects
 ├── fixtures/               # Test data
-│   └── test-data.ts
 ├── playwright.config.ts    # Playwright configuration
 ├── package.json
 └── README.md
 ```
 
-## 🧪 Test Categories
-
-### Smoke Tests (`tests/smoke/`)
-Basic health checks to verify the system is up and running. These tests should run quickly and catch major issues.
-
-**Example:**
-```typescript
-test('should return 200 OK from echo endpoint', async ({ request }) => {
-  const response = await request.get('/api/echo');
-  expect(response.ok()).toBeTruthy();
-});
-```
-
-### API Tests (`tests/api/`)
-Comprehensive tests for all API endpoints including:
-- **Cities API**: Get cities, create cities, validate schemas
-- **Flights API**: Search flights, calculate routes, validate prices
-- **Taxes API**: External API integration
-
-**Example:**
-```typescript
-test('should get city by name', async ({ request }) => {
-  const response = await request.get('/api/cities/by-name/Skopje');
-  const city = await response.json();
-  
-  expect(city.name).toBe('Skopje');
-  expect(city).toHaveProperty('country');
-  expect(city).toHaveProperty('airports');
-});
-```
-
 ### UI Tests (`tests/ui/`)
-End-to-end UI tests for the Angular frontend (to be added).
+End-to-end UI tests for the Flight Reservation System using the Page Object Model.
 
 ## 🛠️ Writing New Tests
 
-### Using API Helpers
+### Using Page Objects
 
 ```typescript
-import { ApiClient } from '../../helpers/api-helpers';
+import { CityManagementPage } from '../../pages/cityManagementPage';
 
-test('example test', async ({ request }) => {
-  const apiClient = new ApiClient(request);
-  
-  // GET request
-  const response = await apiClient.get('/api/cities');
-  
-  // POST request
-  const created = await apiClient.post('/api/cities', {
-    name: 'NewCity',
-    country: { name: 'Country' }
-  });
-  
-  // Schema validation
-  apiClient.validateSchema(data, expectedSchema);
+test('should create a city', async ({ page }) => {
+  const cityPage = new CityManagementPage(page);
+  await cityPage.navigateToCityManagement();
+  await cityPage.addCity('London', 'UK', 'Test');
 });
 ```
 
