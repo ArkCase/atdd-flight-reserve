@@ -1,5 +1,12 @@
 services:
 
+  frontend:
+    image: ghcr.io/arkcase/atdd-flight-reserve/frontend:latest
+    ports:
+      - "4200:80"
+    depends_on:
+      - monolith
+
   monolith:
     image: ghcr.io/arkcase/atdd-flight-reserve/monolith:latest
     environment:
