@@ -118,9 +118,66 @@ jobs:
         retention-days: 7
 
   
+  ui-test:
+    needs: [should-run, find-latest-images]
+    if: needs.should-run.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Deploy System
+      id: deploy-system
+      uses: ./.github/actions/deploy-docker-images
+      with:
+        environment: acceptance
+        version: latest
+        image-urls: ${{ needs.find-latest-images.outputs.image-digest-urls }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+
+    - name: Install Frontend Dependencies
+      working-directory: flight-reserve-frontend
+      run: npm install --legacy-peer-deps
+
+    - name: Start Frontend
+      working-directory: flight-reserve-frontend
+      run: npm start &
+      
+    - name: Install Playwright Dependencies
+      working-directory: playwright-tests
+      run: npm install
+
+    - name: Install Playwright Browsers
+      working-directory: playwright-tests
+      run: npx playwright install --with-deps chromium
+
+    - name: Wait for Frontend
+      run: npx wait-on http://localhost:4200 -t 120000
+
+    - name: Run UI Tests
+      working-directory: playwright-tests
+      run: npm run test:ui -- --reporter=list,junit
+
+    - name: Upload UI Test Reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: ui-test-reports
+        path: playwright-tests/playwright-report/
+        retention-days: 7
+
+
   prerelease:
-    needs: [find-latest-images, should-run, system-test]
-    if: needs.system-test.result == 'success'
+    needs: [find-latest-images, should-run, system-test, ui-test]
+    if: needs.system-test.result == 'success' && needs.ui-test.result == 'success'
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.generate-version.outputs.version }}
@@ -163,7 +220,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   summary:
-    needs: [find-latest-images, should-run, prerelease, system-test]
+    needs: [find-latest-images, should-run, prerelease, system-test, ui-test]
     if: always()  # Run even if previous jobs fail
     runs-on: ubuntu-latest
     

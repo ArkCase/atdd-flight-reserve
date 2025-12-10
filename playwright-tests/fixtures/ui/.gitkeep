@@ -1,0 +1,7 @@
+# Placeholder for UI fixtures
+
+This directory will contain UI-specific test fixtures such as:
+- Mock user data
+- Test accounts
+- UI state fixtures
+- Mock API responses for UI tests
