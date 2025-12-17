@@ -81,42 +81,8 @@ jobs:
         version: latest
         image-urls: ${{ needs.find-latest-images.outputs.image-digest-urls }}
 
-    - name: Setup Java
-      uses: actions/setup-java@v4
-      with:
-        java-version: 21
-        distribution: temurin
-
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4.0.0
-    
-    - name: Make Gradle Wrapper executable
-      run: chmod +x ./gradlew
-      working-directory: system-test
-
     - name: Run Acceptance Tests
       run: echo "Run Acceptance Tests"
-
-    - name: Run External System Contract Tests
-      run: echo "Run External System Contract Tests"
-
-    - name: Run E2E API Tests
-      working-directory: system-test
-      env:
-        EXTERNAL_API_URL: ${{ secrets.EXTERNAL_API_URL }}
-        EXTERNAL_API_KEY: ${{ secrets.EXTERNAL_API_KEY }}
-      run: |
-        export EXTERNAL_API_URL=$(echo $EXTERNAL_API_URL | tr -d '"')
-        export EXTERNAL_API_KEY=$(echo $EXTERNAL_API_KEY | tr -d '"')
-        ./gradlew test --tests com.armedia.atddaccelerator.template.systemtest.e2etests.* --info --stacktrace
-
-    - name: Upload Test Reports
-      if: always()  # Upload even if tests fail
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-reports
-        path: system-test/build/reports/tests/test/
-        retention-days: 7
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -133,6 +99,14 @@ jobs:
       working-directory: playwright-tests
       run: npx playwright install --with-deps chromium
 
+    - name: Run E2E API Tests
+      working-directory: playwright-tests
+      env:
+        EXTERNAL_API_URL: ${{ secrets.EXTERNAL_API_URL }}
+        EXTERNAL_API_KEY: ${{ secrets.EXTERNAL_API_KEY }}
+        BASE_URL: http://localhost:8080 
+      run: npm run test:api -- --reporter=list,junit
+
     - name: Wait for Frontend
       run: |
         echo "⏳ Waiting for frontend to be ready..."
@@ -142,27 +116,12 @@ jobs:
           exit 1
         }
         echo "Frontend is ready!"
-      working-directory: system-test
           
     - name: Run UI Tests
       working-directory: playwright-tests
       run: npm run test:ui -- --reporter=list,junit
       env:
         BASE_URL: http://localhost:4200
-
-    - name: Show Docker Logs on Failure
-      if: failure()
-      run: |
-          echo "📋 Docker Compose Services Status:"
-          docker compose ps
-          echo ""
-          echo "📋 Frontend Logs:"
-          docker compose logs frontend
-          echo ""
-          echo "📋 Backend Logs:"
-          docker compose logs monolith
-      working-directory: system-test
-
 
   prerelease:
     needs: [find-latest-images, should-run, system-test]
