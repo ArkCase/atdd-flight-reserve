@@ -1,10 +1,11 @@
 # Flight Reservation System (FRS)
 This repository contains the code for the Flight Reservation System (FRS) project, developed as part of the ATDD Accelerator Training program. 
 
-This is an ATDD Sandbox Project for the team memebers to build the system together using Acceptance Test Driven Development in https://atdd-accelerator.optivem.com/ classs, given by https://www.linkedin.com/in/valentinajemuovic.
+This is an ATDD Sandbox Project for the team members to build the system together using Acceptance Test Driven Development in https://atdd-accelerator.optivem.com/ class, given by https://www.linkedin.com/in/valentinajemuovic.
 
 [![pages-build-deployment](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/pages/pages-build-deployment/badge.svg?branch=main)](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/pages/pages-build-deployment)
-[![commit-stage-monolith](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/commit-stage-monolith.yml/badge.svg)](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/commit-stage-monolith.yml)
+[![commit-stage-backend](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/commit-stage-monolith.yml/badge.svg)](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/commit-stage-backend.yml)
+[![commit-stage-frontend](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/commit-stage-monolith.yml/badge.svg)](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/commit-stage-frontend.yml)
 [![acceptance-stage](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/acceptance-stage.yml/badge.svg)](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/acceptance-stage.yml)
 [![qa-stage](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/qa-stage.yml/badge.svg)](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/qa-stage.yml)
 [![qa-signoff](https://github.com/ArkCase/atdd-flight-reserve/actions/workflows/qa-signoff.yml/badge.svg)](https://github.com/ArkCase/atdd-flight-reserve/workflows/qa-signoff.yml)
