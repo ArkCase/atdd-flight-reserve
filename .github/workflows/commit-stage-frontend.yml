@@ -45,7 +45,7 @@ jobs:
         uses: optivem/publish-docker-image-action@v1
         with:
           working-directory: flight-reserve-client
-          image-name: frontend
+          image-name: client
           registry: ghcr.io
           registry-username: ${{ github.actor }}
           image-namespace: ${{ env.IMAGE_NAMESPACE }}
