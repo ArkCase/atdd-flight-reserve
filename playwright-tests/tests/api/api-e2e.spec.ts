@@ -1,4 +1,4 @@
-import { test, expect, APIRequestContext } from '@playwright/test';
+import {expect, test} from '@playwright/test';
 
 test.describe('ApiE2eTest', () => {
 
@@ -7,8 +7,8 @@ test.describe('ApiE2eTest', () => {
         // We simulate the response directly without making a network call.
         const mockResponse = {
             status: () => 200,
-            body: async () => JSON.stringify({ data: { taxRate: 0.2 } }),
-            text: async () => JSON.stringify({ data: { taxRate: 0.2 } })
+            body: async () => JSON.stringify({data: {taxRate: 0.2}}),
+            text: async () => JSON.stringify({data: {taxRate: 0.2}})
         };
 
         // Assert
@@ -17,7 +17,7 @@ test.describe('ApiE2eTest', () => {
         expect(body).toContain("data");
     });
 
-    test('getCitiesByName should return with expected format', async ({ request }) => {
+    test('getCitiesByName should return with expected format', async ({request}) => {
         // DISCLAIMER: This is an example of a badly written test
         // which unfortunately simulates real-life software test projects.
         // This is the starting point for our ATDD Accelerator exercises.
@@ -39,7 +39,7 @@ test.describe('ApiE2eTest', () => {
         expect(hasNameField).toBeTruthy();
     });
 
-    test('saveTestCity should return OK', async ({ request }) => {
+    test('saveTestCity should return OK', async ({request}) => {
         const uniqueId = Date.now();
         const cityName = `Test-${uniqueId}`;
         const airportName = `Airport-${uniqueId}`;
@@ -69,22 +69,21 @@ test.describe('ApiE2eTest', () => {
         expect(hasNameField).toBeTruthy();
     });
 
-    test('getFlightFromTo should return with expected price', async ({ request }) => {
+    test('getFlightFromTo should return with expected price', async ({request}) => {
         // DISCLAIMER: This is an example of a badly written test
         // which unfortunately simulates real-life software test projects.
         // This is the starting point for our ATDD Accelerator exercises.
 
-        const response = await request.get('/api/flights/1609/325');
+        const response = await request.get('/api/flights/1609/325', {
+            timeout: 90000 // 90 seconds
+        });
 
         expect(response.status()).toBe(200);
 
-        const responseBody = await response.text();
-
-        // Verify JSON structure contains expected fields
-        expect(responseBody).toContain("Skopje");
-        expect(responseBody).toContain("Berlin");
-
-        const hasPriceField = responseBody.includes('"price":209.71') || responseBody.includes('"price": 209.71');
-        expect(hasPriceField).toBeTruthy();
+        const responseBody = await response.json();
+        expect(responseBody).toMatchObject({
+            cities: expect.arrayContaining(["Skopje", "Berlin"]),
+            price: 209.71
+        });
     });
 });

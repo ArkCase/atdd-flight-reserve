@@ -22,7 +22,7 @@ runs:
         # List Docker images being deployed
         if [[ -n "${{ inputs.image-urls }}" ]]; then
           echo "📦 Deploying the following Docker images:"
-          
+        
           # Parse JSON array and iterate through each URL
           echo '${{ inputs.image-urls }}' | jq -r '.[]' | while IFS= read -r image_url; do
             if [[ -n "$image_url" ]]; then
@@ -52,26 +52,25 @@ runs:
         max-attempts: '3'
         wait-seconds: '60'
         working-directory: system-test
-      
-    - name: Setup Java
-      uses: actions/setup-java@v4
-      with:
-        java-version: 17
-        distribution: temurin
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4.0.0
+    - name: Setup Node
+      uses: actions/setup-node@v4
       with:
-        validate-wrappers: false
-    
-    - name: Make Gradle Wrapper executable
-      run: chmod +x ./gradlew
+        node-version: 20
+        cache: 'npm'
+        cache-dependency-path: playwright-tests/package-lock.json
+
+    - name: Install dependencies
+      run: npm ci
       shell: bash
-      working-directory: system-test
-        
+      working-directory: playwright-tests
+
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps chromium
+      shell: bash
+      working-directory: playwright-tests
+
     - name: Run Smoke Tests
-      run: ./gradlew test --tests com.armedia.atddaccelerator.template.systemtest.smoketests.*
+      run: npm test -- tests/smoke-tests
       shell: bash
-      working-directory: system-test
-
-
+      working-directory: playwright-tests

@@ -35,8 +35,8 @@ jobs:
       uses: optivem/find-latest-docker-images-action@v1
       with:
         image-urls: |
-          ghcr.io/arkcase/${{ github.event.repository.name }}/monolith:latest
-          ghcr.io/arkcase/${{ github.event.repository.name }}/frontend:latest
+          ghcr.io/arkcase/${{ github.event.repository.name }}/api:latest
+          ghcr.io/arkcase/${{ github.event.repository.name }}/client:latest
 
   should-run:
     needs: find-latest-images
@@ -84,27 +84,27 @@ jobs:
     - name: Run Acceptance Tests
       run: echo "Run Acceptance Tests"
 
-    - name: Setup Node.js
+    - name: Setup Node
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: 20
         cache: 'npm'
         cache-dependency-path: playwright-tests/package-lock.json
 
-    - name: Install Test Dependencies
-      working-directory: playwright-tests
+    - name: Install dependencies
       run: npm ci
+      shell: bash
+      working-directory: playwright-tests
 
     - name: Install Playwright Browsers
-      working-directory: playwright-tests
       run: npx playwright install --with-deps chromium
+      shell: bash
+      working-directory: playwright-tests
 
     - name: Run E2E API Tests
       working-directory: playwright-tests
       env:
-        EXTERNAL_API_URL: ${{ secrets.EXTERNAL_API_URL }}
-        EXTERNAL_API_KEY: ${{ secrets.EXTERNAL_API_KEY }}
-        BASE_URL: http://localhost:8080 
+        BASE_URL: http://localhost:8080
       run: npm run test:api -- --reporter=list,junit
 
     - name: Wait for Frontend

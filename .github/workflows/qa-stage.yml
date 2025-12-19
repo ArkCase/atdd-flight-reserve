@@ -39,8 +39,8 @@ jobs:
         with:
           tag: ${{ inputs.version }}
           base-image-urls: |
-            ghcr.io/arkcase/${{ github.event.repository.name }}/monolith
-            ghcr.io/arkcase/${{ github.event.repository.name }}/frontend
+            ghcr.io/arkcase/${{ github.event.repository.name }}/api
+            ghcr.io/arkcase/${{ github.event.repository.name }}/client
 
   deployment:
     needs: [check-release-exists, resolve-docker-images]

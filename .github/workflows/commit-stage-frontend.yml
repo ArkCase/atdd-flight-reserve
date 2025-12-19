@@ -4,12 +4,12 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - 'frontend/**'
+      - 'flight-reserve-client/**'
       - '.github/workflows/commit-stage-frontend.yml'
   pull_request:
     branches: [ "main" ]
     paths:
-      - 'flight-reserve-frontend/**'
+      - 'flight-reserve-client/**'
       - '.github/workflows/commit-stage-frontend.yml'
   workflow_dispatch:
 
