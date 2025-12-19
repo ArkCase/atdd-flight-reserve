@@ -15,12 +15,12 @@ services:
       DB_USERNAME: fl_advisor
       DB_PASSWORD: fl_advisor
     volumes:
-      - ./src/main/resources/db/migration/data:/app/data
+      - ./db-init/data:/app/data
     depends_on:
       mysql:
         condition: service_healthy
     ports:
-      - "8080:8080"
+      - "8083:8080"
     command: >
       sh -c '
         echo "🧩 Waiting for MySQL...";
