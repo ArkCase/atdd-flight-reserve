@@ -1,0 +1,45 @@
+<div class="country-info-container">
+  <mat-card>
+  <mat-card-header>
+    <mat-card-title>Country Currency & Timezone</mat-card-title>
+  </mat-card-header>
+
+  <div class="search-container">
+    <input
+      type="text"
+      [(ngModel)]="countryName"
+      placeholder="Enter country name (e.g. Spain)"
+      class="country-input"
+      required
+    />
+    <button (click)="loadCountryInfo()">Search</button>
+  </div>
+  <mat-card-content>
+    <div *ngIf="error" class="error">
+      <mat-card class="error-card">
+        <mat-icon>error_outline</mat-icon>
+        {{ error }}
+      </mat-card>
+    </div>
+
+    <div *ngFor="let country of countries" class="country-card">
+
+      <h3>{{ country.officialName }}</h3>
+
+      <strong>Currencies</strong>
+      <ul>
+        <li *ngFor="let cur of country.currencies | keyvalue">
+          {{ cur.key }} – {{ cur.value.name }} ({{ cur.value.symbol }})
+        </li>
+      </ul>
+
+      <strong>Timezones</strong>
+      <ul>
+        <li *ngFor="let tz of country.timezones">
+          {{ tz }}
+        </li>
+      </ul>
+    </div>
+  </mat-card-content>
+  </mat-card>
+</div>

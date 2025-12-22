@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FlightSearchComponent } from './components/flight-search/flight-search.component';
 import { CityManagementComponent } from './components/city-management/city-management.component';
 import { TaxInfoComponent } from './components/tax-info/tax-info.component';
+import { CountryInfoComponent} from './components/country-info/country-info.component';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,8 @@ import { TaxInfoComponent } from './components/tax-info/tax-info.component';
     MatIconModule,
     FlightSearchComponent,
     CityManagementComponent,
-    TaxInfoComponent
+    TaxInfoComponent,
+    CountryInfoComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

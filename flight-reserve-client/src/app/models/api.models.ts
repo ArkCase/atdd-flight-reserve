@@ -38,6 +38,15 @@ export interface RouteDTO {
   airlineId: number;
 }
 
+export interface CurrencyDto {
+  name: string;
+  symbol: string;
+}
+
+export interface CurrenciesMapDto {
+  [currencyCode: string]: CurrencyDto;
+}
+
 export interface FlightSearchResult {
   route: RouteDTO;
   sourceAirport: AirportDTO;
@@ -57,3 +66,10 @@ export interface CreateCityRequest {
   countryId: number;
   description?: string;
 }
+
+export interface CountryInfo {
+  officialName: string;
+  currencies: CurrenciesMapDto;
+  timezones: string[];
+}
+

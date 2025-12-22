@@ -1,0 +1,78 @@
+/* Keep existing container max-width */
+.country-info-container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 0; /* remove extra padding, handle spacing inside card */
+}
+
+mat-card-title {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+/* mat-card full width inside container */
+mat-card {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 0; /* remove default padding */
+}
+
+/* Header padding */
+mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px; /* consistent padding */
+  margin-bottom: 0;
+}
+
+/* Content padding to match header */
+mat-card-content {
+  padding: 16px; /* same as header */
+}
+
+/* Search input/button container */
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;       /* full width of card-content */
+  margin-bottom: 20px;
+}
+
+/* Input takes remaining space */
+.country-input {
+  flex: 1;
+  padding: 6px;
+  font-size: 14px;
+}
+
+/* Button */
+button {
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Error card alignment */
+.error-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background-color: #ffe5e5;
+  color: #d32f2f;
+  width: 100%; /* match input width */
+}
+
+/* Country cards alignment */
+.country-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background-color: #fafafa;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  width: 100%; /* match input width */
+}
