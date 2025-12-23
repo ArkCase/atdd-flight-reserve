@@ -7,7 +7,8 @@ import {
   RouteDTO,
   TaxInfo,
   CreateCityRequest,
-  CountryDTO
+  CountryDTO,
+  CountryInfo
 } from '../models/api.models';
 
 @Injectable({
@@ -68,4 +69,10 @@ export class ApiService {
   getTaxInfo(): Observable<TaxInfo> {
     return this.http.get<TaxInfo>(`${this.baseUrl}/taxes/info`);
   }
+
+  // Country Information
+  getCountryInfo(countryName: string) : Observable<CountryInfo[]> {
+    return this.http.get<CountryInfo[]>(`${this.baseUrl}/country/info/${countryName}`)
+  }
+
 }

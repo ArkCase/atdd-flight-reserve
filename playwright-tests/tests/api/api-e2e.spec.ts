@@ -2,21 +2,6 @@ import {expect, test} from '@playwright/test';
 
 test.describe('ApiE2eTest', () => {
 
-    test('getTaxesFromExternalAPI should return OK', async () => {
-        // DISCLAIMER: Replicating the "badly written test" behavior from Java where the client was mocked.
-        // We simulate the response directly without making a network call.
-        const mockResponse = {
-            status: () => 200,
-            body: async () => JSON.stringify({data: {taxRate: 0.2}}),
-            text: async () => JSON.stringify({data: {taxRate: 0.2}})
-        };
-
-        // Assert
-        expect(mockResponse.status()).toBe(200);
-        const body = await mockResponse.text();
-        expect(body).toContain("data");
-    });
-
     test('getCitiesByName should return with expected format', async ({request}) => {
         // DISCLAIMER: This is an example of a badly written test
         // which unfortunately simulates real-life software test projects.
@@ -37,6 +22,16 @@ test.describe('ApiE2eTest', () => {
         // Check for "name":"Skopje" or "name": "Skopje"
         const hasNameField = responseBody.includes('"name":"Skopje"') || responseBody.includes('"name": "Skopje"');
         expect(hasNameField).toBeTruthy();
+    });
+
+    test('GetCountryInfoByName should return data', async ({request}) => {
+        const response = await request.get('/api/country/info/macedonia');
+
+        expect(response.status()).toBe(200);
+
+        const responseBody = await response.text();
+
+        expect(responseBody).toContain("Macedonia");
     });
 
     test('saveTestCity should return OK', async ({request}) => {
