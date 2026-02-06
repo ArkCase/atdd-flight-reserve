@@ -27,12 +27,18 @@ export interface AirportDTO {
   source: string;
 }
 
+export interface PriceDTO {
+  usd: number;
+  local?: number | null;
+  localCurrency?: string | null;
+}
+
 export interface RouteDTO {
   id: number;
   codeshare: string;
   stops: number;
   equipment: string;
-  price: number;
+  price: PriceDTO;
   srcAirportId: number;
   dstAirportId: number;
   airlineId: number;
