@@ -23,13 +23,13 @@ import java.util.List;
 public class CountryInfoController
 {
 
-    CountryInfoExternal countryInfoExternalService;
+    private final CountryInfoExternal countryInfoExternal;
 
     @GetMapping("/{countryName}")
     public ResponseEntity<List<CountryInfoDTO>> countryCurrentAndTimeZoneInfo(@PathVariable String countryName)
     {
         List<CountryInfoDTO> response =
-                countryInfoExternalService.getCountryCurrencyAndTimezone(countryName);
+                countryInfoExternal.getCountryCurrencyAndTimezone(countryName);
 
         if (response.isEmpty()) {
             return ResponseEntity.notFound().build();
