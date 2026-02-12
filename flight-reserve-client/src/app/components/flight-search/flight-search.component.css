@@ -171,6 +171,12 @@ mat-card-subtitle {
   margin-left: 8px;
 }
 
+.local-price {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+}
+
 /* Autocomplete panel styling */
 ::ng-deep .mat-mdc-autocomplete-panel {
   max-height: 400px;

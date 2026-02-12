@@ -4,14 +4,14 @@
       <mat-card-title>Search Routes</mat-card-title>
       <mat-card-subtitle>Find available routes between two airports</mat-card-subtitle>
     </mat-card-header>
-    
+
     <mat-card-content>
       <div class="search-form">
-        
+
         <!-- SOURCE SELECTION -->
         <div class="selection-group">
           <h3>Source</h3>
-          
+
           <!-- Source Country -->
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Source Country</mat-label>
@@ -26,15 +26,15 @@
           <!-- Source City Autocomplete -->
           <mat-form-field appearance="outline" class="full-width" *ngIf="sourceCountry">
             <mat-label>Source City</mat-label>
-            <input 
+            <input
               type="text"
               matInput
               [formControl]="sourceCityControl"
               [matAutocomplete]="sourceAuto"
               placeholder="Type at least 2 characters...">
             <mat-icon matPrefix>location_city</mat-icon>
-            <mat-autocomplete 
-              #sourceAuto="matAutocomplete" 
+            <mat-autocomplete
+              #sourceAuto="matAutocomplete"
               [displayWith]="displayCity"
               (optionSelected)="onSourceCitySelected($event.option.value)">
               <mat-option *ngFor="let city of filteredSourceCities$ | async" [value]="city">
@@ -64,7 +64,7 @@
         <!-- DESTINATION SELECTION -->
         <div class="selection-group">
           <h3>Destination</h3>
-          
+
           <!-- Destination Country -->
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Destination Country</mat-label>
@@ -79,15 +79,15 @@
           <!-- Destination City Autocomplete -->
           <mat-form-field appearance="outline" class="full-width" *ngIf="destinationCountry">
             <mat-label>Destination City</mat-label>
-            <input 
+            <input
               type="text"
               matInput
               [formControl]="destinationCityControl"
               [matAutocomplete]="destAuto"
               placeholder="Type at least 2 characters...">
             <mat-icon matPrefix>location_city</mat-icon>
-            <mat-autocomplete 
-              #destAuto="matAutocomplete" 
+            <mat-autocomplete
+              #destAuto="matAutocomplete"
               [displayWith]="displayCity"
               (optionSelected)="onDestinationCitySelected($event.option.value)">
               <mat-option *ngFor="let city of filteredDestinationCities$ | async" [value]="city">
@@ -114,9 +114,9 @@
 
         <!-- Action Buttons -->
         <div class="button-row">
-          <button 
-            mat-raised-button 
-            color="primary" 
+          <button
+            mat-raised-button
+            color="primary"
             (click)="searchRoutes()"
             [disabled]="!selectedSourceAirport || !selectedDestinationAirport || loading">
             <mat-icon>search</mat-icon>
@@ -155,7 +155,7 @@
         Routes from {{ selectedSourceAirport?.iata }} to {{ selectedDestinationAirport?.iata }}
       </mat-card-subtitle>
     </mat-card-header>
-    
+
     <mat-card-content>
       <div class="routes-grid">
         <div *ngFor="let route of routes; let i = index" class="route-card">
@@ -174,7 +174,7 @@
               <strong>To:</strong> {{ selectedDestinationAirport?.iata }} ({{ selectedDestinationAirport?.name }})
             </div>
             <div class="route-detail">
-              <strong>Stops:</strong> 
+              <strong>Stops:</strong>
               <span [class.direct-flight]="route.stops === 0">
                 {{ route.stops === 0 ? 'Direct Flight' : route.stops + ' stop(s)' }}
               </span>
@@ -183,8 +183,19 @@
               <strong>Equipment:</strong> {{ route.equipment }}
             </div>
             <div class="route-detail" *ngIf="route.price">
-              <strong>Price:</strong> 
-              <span class="price">${{ route.price | number:'1.2-2' }}</span>
+              <strong>Price:</strong>
+
+              <!-- USD price (always shown) -->
+              <div class="price">
+                ${{ route.price.usd | number:'1.2-2' }}
+              </div>
+              <!-- Local currency price (only if available) -->
+              <div class="local-price"
+                *ngIf="route.price.local !== null && route.price.localCurrency">
+              <strong>Local Price: </strong>
+                {{ route.price.local | number:'1.2-2' }}
+                {{ route.price.localCurrency }}
+              </div>
             </div>
             <div class="route-detail" *ngIf="route.codeshare">
               <span class="codeshare-badge">Codeshare: {{ route.codeshare }}</span>

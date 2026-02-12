@@ -2,6 +2,9 @@ package com.armedia.flightreserve.controllers.api.dto;
 
 import com.armedia.flightreserve.model.Route;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public record RouteDTO(
     Long id,
     String airline,
@@ -10,9 +13,22 @@ public record RouteDTO(
     String codeshare,
     Integer stops,
     String equipment,
-    Double price
+    PriceDTO price
 ) {
-    public static RouteDTO from(Route route) {
+
+    public static RouteDTO from(
+            Route route,
+            double exchangeRate,
+            String localCurrency
+    ) {
+
+        double usdPrice = route.getPrice();
+
+        double localPrice = BigDecimal
+                .valueOf(usdPrice * exchangeRate)
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue();
+
         return new RouteDTO(
                 route.getId(),
                 route.getAirline() != null ? route.getAirline().getCode() : null,
@@ -21,7 +37,11 @@ public record RouteDTO(
                 route.getCodeshare(),
                 route.getStops(),
                 route.getEquipment(),
-                route.getPrice()
+                new PriceDTO(
+                        usdPrice,
+                        localPrice,
+                        localCurrency
+                )
         );
     }
 }
