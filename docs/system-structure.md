@@ -4,29 +4,25 @@
 
 ## Architecture Style
 
-- Monolith
+- Frontend + Monolithic Backend
 
 ## Architecture Diagram
 
-Frontend and Monolithic Backend  mimicing the real life project.
-
 ```mermaid
----
-config:
-  layout: fixed
----
 flowchart LR
- subgraph Monolith["<b>Flight Reservation System (FRS)</b>"]
-        FE["Frontend"]
-        BE["Backend"]
+ subgraph Client["<b>Client</b>"]
+        FE["Angular Frontend<br/>(Node.js)"]
+  end
+ subgraph Monolith["<b>Monolithic Backend (FRS)</b>"]
+        BE["Backend<br/>(Java/Spring)"]
         DB[("Database")]
   end
  subgraph subGraph1["External Systems"]
-        GDS["<b>GDS</b>"]
-        CRS["<b>CRS</b>"]
+        CurrencyAPI["<b>Currency Exchange Rate API</b>"]
   end
-    FE --> BE
-    BE --> DB & GDS & CRS
+    FE -->|"API Requests"| BE
+    BE -->|"Read"| DB
+    BE -->|"Get Exchange Rates"| CurrencyAPI
 ```
 
 ## Tech Stack
@@ -38,10 +34,10 @@ Programming Languages:
 
 Database:
 
-- MariaDB
+- MySQL
 
 ## Repository Strategy
 
-Mono-repo Repository Structure
+Mono-repo Repository Structure with multiple components API + Client
 
 [Flight Reservation System Repository](https://github.com/ArkCase/atdd-flight-reserve)
