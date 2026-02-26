@@ -194,3 +194,22 @@ mat-card-subtitle {
     grid-template-columns: 1fr;
   }
 }
+
+.original-price {
+  text-decoration: line-through;
+  color: #999;
+  margin-right: 8px;
+}
+
+.discounted-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2e7d32;
+}
+
+.night-discount-badge {
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2e7d32;
+}

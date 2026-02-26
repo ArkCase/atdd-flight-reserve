@@ -37,7 +37,7 @@ import { debounceTime, distinctUntilChanged, switchMap, catchError, startWith } 
 })
 export class FlightSearchComponent implements OnInit {
   countries: CountryDTO[] = [];
-  
+
   // Source selection
   sourceCountry: CountryDTO | null = null;
   sourceCityControl = new FormControl('');
@@ -45,7 +45,7 @@ export class FlightSearchComponent implements OnInit {
   selectedSourceCity: CityDTO | null = null;
   sourceAirports: AirportDTO[] = [];
   selectedSourceAirport: AirportDTO | null = null;
-  
+
   // Destination selection
   destinationCountry: CountryDTO | null = null;
   destinationCityControl = new FormControl('');
@@ -53,10 +53,10 @@ export class FlightSearchComponent implements OnInit {
   selectedDestinationCity: CityDTO | null = null;
   destinationAirports: AirportDTO[] = [];
   selectedDestinationAirport: AirportDTO | null = null;
-  
+
   // Routes
   routes: RouteDTO[] = [];
-  
+
   loading = false;
   error: string | null = null;
 
@@ -86,7 +86,7 @@ export class FlightSearchComponent implements OnInit {
     this.selectedSourceCity = null;
     this.sourceAirports = [];
     this.selectedSourceAirport = null;
-    
+
     if (this.sourceCountry) {
       this.setupSourceCityAutocomplete();
     }
@@ -97,7 +97,7 @@ export class FlightSearchComponent implements OnInit {
     this.selectedDestinationCity = null;
     this.destinationAirports = [];
     this.selectedDestinationAirport = null;
-    
+
     if (this.destinationCountry) {
       this.setupDestinationCityAutocomplete();
     }
@@ -112,11 +112,11 @@ export class FlightSearchComponent implements OnInit {
       distinctUntilChanged(),
       switchMap(value => {
         const searchQuery = typeof value === 'string' ? value : '';
-        
+
         if (!searchQuery || searchQuery.length < 2) {
           return of([]);
         }
-        
+
         return this.apiService.searchCities(this.sourceCountry!.id!, searchQuery).pipe(
           catchError(err => {
             console.error('Error searching cities:', err);
@@ -136,11 +136,11 @@ export class FlightSearchComponent implements OnInit {
       distinctUntilChanged(),
       switchMap(value => {
         const searchQuery = typeof value === 'string' ? value : '';
-        
+
         if (!searchQuery || searchQuery.length < 2) {
           return of([]);
         }
-        
+
         return this.apiService.searchCities(this.destinationCountry!.id!, searchQuery).pipe(
           catchError(err => {
             console.error('Error searching cities:', err);
@@ -169,10 +169,10 @@ export class FlightSearchComponent implements OnInit {
     if (!this.selectedSourceCity || !this.selectedSourceCity.country.id) {
       return;
     }
-    
+
     this.loading = true;
     this.apiService.getAirportsByCityAndCountry(
-      this.selectedSourceCity.id, 
+      this.selectedSourceCity.id,
       this.selectedSourceCity.country.id
     ).subscribe({
       next: (airports) => {
@@ -191,10 +191,10 @@ export class FlightSearchComponent implements OnInit {
     if (!this.selectedDestinationCity || !this.selectedDestinationCity.country.id) {
       return;
     }
-    
+
     this.loading = true;
     this.apiService.getAirportsByCityAndCountry(
-      this.selectedDestinationCity.id, 
+      this.selectedDestinationCity.id,
       this.selectedDestinationCity.country.id
     ).subscribe({
       next: (airports) => {
@@ -218,7 +218,7 @@ export class FlightSearchComponent implements OnInit {
     this.loading = true;
     this.error = null;
     this.routes = [];
-    
+
     this.apiService.getRoutesByAirports(
       this.selectedSourceAirport.id,
       this.selectedDestinationAirport.id
@@ -238,19 +238,28 @@ export class FlightSearchComponent implements OnInit {
     });
   }
 
+  isAfterDiscountedPM(): boolean {
+    const now = new Date();
+    return now.getHours() >= 21;
+  }
+
+  getDiscountedPrice(price: number): number {
+    return +(price * 0.95).toFixed(2);
+  }
+
   resetSearch(): void {
     this.sourceCountry = null;
     this.sourceCityControl.setValue('');
     this.selectedSourceCity = null;
     this.sourceAirports = [];
     this.selectedSourceAirport = null;
-    
+
     this.destinationCountry = null;
     this.destinationCityControl.setValue('');
     this.selectedDestinationCity = null;
     this.destinationAirports = [];
     this.selectedDestinationAirport = null;
-    
+
     this.routes = [];
     this.error = null;
   }
