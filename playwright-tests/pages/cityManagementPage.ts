@@ -12,9 +12,11 @@ export class CityManagementPage extends BasePage {
     // Add New City Section
     readonly cityNameInput: Locator;
     readonly countryInput: Locator;
+    readonly countryOption: Locator;    
     readonly descriptionInput: Locator;
     readonly addCityButton: Locator;
     readonly clearButton: Locator;
+    readonly notification: Locator;
 
     // Search Cities Section
     readonly searchCountryInput: Locator;
@@ -36,9 +38,11 @@ export class CityManagementPage extends BasePage {
         const addSection = page.locator('.add-city-section');
         this.cityNameInput = addSection.locator('input[placeholder="Enter city name"]');
         this.countryInput = addSection.locator('input[placeholder="Type to search countries..."]');
+        this.countryOption = page.locator('mat-option')
         this.descriptionInput = addSection.locator('input[placeholder="Enter description"]');
         this.addCityButton = addSection.locator('button', { hasText: 'Add City' });
         this.clearButton = addSection.locator('button', { hasText: 'Clear' });
+        this.notification = page.locator('simple-snack-bar, .mat-mdc-simple-snack-bar');
 
         // Search Cities Section
         const searchSection = page.locator('.search-cities-section');
