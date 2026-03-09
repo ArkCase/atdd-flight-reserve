@@ -3,6 +3,7 @@ import test, { expect } from "@playwright/test";
 
 test.describe('City Management UI - CRUD Operations', () => {
     let searchFlightsPage: SearchFlightsPage;
+    
 
     test.beforeEach(async ({ page }) => {
         await page.goto('/');
@@ -74,4 +75,4 @@ await searchFlightsPage.searchFlightsTab.click();
     await expect(searchFlightsPage.errorCard).toBeVisible();
     await expect(searchFlightsPage.errorCard).toContainText('No routes found between these airports');
     });
-})
+});

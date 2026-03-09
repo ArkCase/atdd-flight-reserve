@@ -40,4 +40,17 @@ test.describe('City Management UI - CRUD Operations', () => {
         const cityExistsAfterSearch = await cityPage.isCityInTable(uniqueCityName);
         expect(cityExistsAfterSearch).toBe(false);
     });
+
+     test('Add City - Should handle numeric-only city name', async ({ page }) => {
+            const numericCityName = `123456_${Date.now()}`;
+            await cityPage.countryInput.click();
+            await cityPage.countryInput.pressSequentially('Germany', { delay: 100 });
+            await page.waitForTimeout(1000);
+            const countryOption = cityPage.countryOption.filter({ hasText: 'Germany' }).first();
+            await countryOption.click();
+            await page.waitForTimeout(500);
+            await cityPage.cityNameInput.fill(numericCityName);
+            await cityPage.addCityButton.click();
+            await expect(cityPage.notification).toBeVisible({ timeout: 8000 });
+        });
 });
