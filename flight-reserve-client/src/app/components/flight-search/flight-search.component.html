@@ -184,19 +184,44 @@
             </div>
             <div class="route-detail" *ngIf="route.price">
               <strong>Price:</strong>
-
-              <!-- USD price (always shown) -->
+              <!-- USD PRICE -->
               <div class="price">
-                ${{ route.price.usd | number:'1.2-2' }}
+                <ng-container *ngIf="isAfterDiscountedPM(); else normalUsd">
+                  <span class="original-price">
+                    ${{ route.price.usd | number:'1.2-2' }}
+                  </span>
+                  <span class="discounted-price">
+                    ${{ getDiscountedPrice(route.price.usd) | number:'1.2-2' }}
+                  </span>
+                </ng-container>
+                <ng-template #normalUsd>
+                  ${{ route.price.usd | number:'1.2-2' }}
+                </ng-template>
               </div>
-              <!-- Local currency price (only if available) -->
-              <div class="local-price"
-                *ngIf="route.price.local !== null && route.price.localCurrency">
-              <strong>Local Price: </strong>
+
+              <!-- LOCAL PRICE -->
+              <div class="local-price" *ngIf="route.price.local !== null && route.price.localCurrency">
+              <strong>Local Price:</strong>
+              <ng-container *ngIf="isAfterDiscountedPM(); else normalLocal">
+                <span class="original-price">
+                  {{ route.price.local | number:'1.2-2' }}
+                  {{ route.price.localCurrency }}
+                </span>
+                <span class="discounted-price">
+                  {{ getDiscountedPrice(route.price.local!) | number:'1.2-2' }}
+                  {{ route.price.localCurrency }}
+                </span>
+              </ng-container>
+              <ng-template #normalLocal>
                 {{ route.price.local | number:'1.2-2' }}
                 {{ route.price.localCurrency }}
-              </div>
+              </ng-template>
             </div>
+            <!-- Night discount badge -->
+            <div *ngIf="isAfterDiscountedPM()" class="night-discount-badge">
+              🌙 5% Night Discount Applied
+            </div>
+          </div>
             <div class="route-detail" *ngIf="route.codeshare">
               <span class="codeshare-badge">Codeshare: {{ route.codeshare }}</span>
             </div>
